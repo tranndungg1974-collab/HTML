@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nghiện Phim Người Lớn - Hiểu Và Vượt Qua</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        nav {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li {
+            margin: 0 15px;
+        }
+        
+        nav ul li a {
+            display: block;
+            padding: 15px 20px;
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        nav ul li a:hover {
+            color: #3498db;
+        }
+        
+        section {
+            padding: 60px 0;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://picsum.photos/id/1015/1920/1080') center/cover;
+            color: white;
+            text-align: center;
+            padding: 120px 0;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        button:hover {
+            background: #c0392b;
+            transform: translateY(-3px);
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #3498db;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Nghiện Phim Người Lớn</h1>
+            <p style="font-size: 1.3rem;">Hiểu rõ • Thừa nhận • Vượt qua</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#gioi-thieu">Giới thiệu</a></li>
+                <li><a href="#trieu-chung">Triệu chứng</a></li>
+                <li><a href="#tac-hai">Tác hại</a></li>
+                <li><a href="#nguyen-nhan">Nguyên nhân</a></li>
+                <li><a href="#vuot-qua">Cách vượt qua</a></li>
+                <li><a href="#tai-nguyen">Tài nguyên</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="gioi-thieu">
+        <div class="container">
+            <h1>Bạn không cô đơn</h1>
+            <p style="font-size: 1.4rem; max-width: 700px; margin: 0 auto 30px;">
+                Hàng triệu người đang gặp phải tình trạng nghiện phim người lớn. 
+                Đây là vấn đề sức khỏe tâm thần nghiêm trọng nhưng hoàn toàn có thể khắc phục.
+            </p>
+            <button onclick="document.getElementById('vuot-qua').scrollIntoView({behavior: 'smooth'})">
+                Bắt đầu hành trình thay đổi
+            </button>
+        </div>
+    </section>
+
+    <!-- Triệu chứng -->
+    <section id="trieu-chung" style="background: #f8f9fa;">
+        <div class="container">
+            <h2>Triệu chứng thường gặp</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>1. Mất kiểm soát</h3>
+                    <p>Không thể kiểm soát thời gian xem, dù đã cố gắng dừng lại nhiều lần.</p>
+                </div>
+                <div class="card">
+                    <h3>2. Ảnh hưởng công việc & học tập</h3>
+                    <p>Giảm năng suất, trì hoãn, mất tập trung vì dành quá nhiều thời gian cho nội dung khiêu dâm.</p>
+                </div>
+                <div class="card">
+                    <h3>3. Vấn đề trong mối quan hệ</h3>
+                    <p>Giảm ham muốn với bạn đời thật, khó đạt cực khoái, hoặc cảm giác tội lỗi khi quan hệ.</p>
+                </div>
+                <div class="card">
+                    <h3>4. Dung nạp (Tolerance)</h3>
+                    <p>Cần xem nội dung mạnh hơn, thời gian dài hơn để đạt được sự kích thích như trước.</p>
+                </div>
+                <div class="card">
+                    <h3>5. Cai nghiện & lo âu</h3>
+                    <p>Khi cố dừng lại sẽ xuất hiện cáu gắt, lo lắng, trầm cảm hoặc mất ngủ.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tác hại -->
+    <section id="tac-hai">
+        <div class="container">
+            <h2>Tác hại nghiêm trọng</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Sức khỏe tâm thần</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>Trầm cảm, lo âu</li>
+                        <li>Giảm tự trọng</li>
+                        <li>Rối loạn cương dương / lãnh cảm</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Sức khỏe thể chất</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>Mệt mỏi mãn tính</li>
+                        <li>Giảm testosterone (nam)</li>
+                        <li>Vấn đề về tư thế & mắt</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Xã hội & Tài chính</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>Mất việc, giảm thu nhập</li>
+                        <li>Cô lập bản thân</li>
+                        <li>Vấn đề pháp lý (nếu xem nội dung bất hợp pháp)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning">
+                <strong>Lưu ý:</strong> Nghiện phim người lớn ảnh hưởng đến não bộ tương tự như nghiện ma túy, làm thay đổi hệ thống phần thưởng dopamine.
+            </div>
+        </div>
+    </section>
+
+    <!-- Nguyên nhân -->
+    <section id="nguyen-nhan" style="background: #f8f9fa;">
+        <div class="container">
+            <h2>Nguyên nhân phổ biến</h2>
+            <div class="grid">
+                <div class="card">
+                    <p><strong>• Dễ tiếp cận:</strong> Internet + điện thoại thông minh</p>
+                    <p><strong>• Stress, cô đơn, chán nản</strong></p>
+                    <p><strong>• Tò mò từ nhỏ</strong></p>
+                    <p><strong>• Rối loạn lo âu hoặc trầm cảm</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cách vượt qua -->
+    <section id="vuot-qua">
+        <div class="container">
+            <h2>Cách vượt qua nghiện</h2>
+            
+            <div class="card">
+                <h3 style="color: #27ae60;">Bước 1: Thừa nhận vấn đề</h3>
+                <p>Viết nhật ký những ngày bạn xem và cảm xúc sau đó.</p>
+            </div>
+            
+            <div class="card">
+                <h3 style="color: #3498db;">Bước 2: Xây dựng thói quen mới</h3>
+                <ul>
+                    <li>Tập thể dục đều đặn (30 phút/ngày)</li>
+                    <li>Thiền hoặc hít thở sâu</li>
+                    <li>Giảm thời gian sử dụng điện thoại</li>
+                    <li>Tham gia cộng đồng hỗ trợ (offline hoặc online an toàn)</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3 style="color: #e67e22;">Công cụ hỗ trợ</h3>
+                <p><strong>Phần mềm chặn:</strong> Covenant Eyes, Qustodio, BlockSite, Cold Turkey</p>
+                <p><strong>Theo dõi:</strong> Habitica, Streaks, hoặc nhật ký giấy</p>
+            </div>
+            
+            <div style="text-align: center; margin: 40px 0;">
+                <button onclick="alert('Bạn đã có bước đầu tiên! Hãy kiên trì. Mỗi ngày không xem là một chiến thắng.')">
+                    Tôi cam kết bắt đầu từ hôm nay
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tài nguyên -->
+    <section id="tai-nguyen" style="background: #f8f9fa;">
+        <div class="container">
+            <h2>Tài nguyên hỗ trợ</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Việt Nam</h3>
+                    <p>Hotline sức khỏe tâm thần: 1900555618</p>
+                    <p>Bệnh viện Tâm thần Trung ương</p>
+                </div>
+                <div class="card">
+                    <h3>Quốc tế (tiếng Việt)</h3>
+                    <p>• Your Brain on Porn (website & sách)</p>
+                    <p>• NoFap cộng đồng</p>
+                    <p>• Fight The New Drug</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p><strong>Lưu ý quan trọng:</strong> Trang web này chỉ mang tính chất tham khảo. Hãy tìm gặp chuyên gia tâm lý hoặc bác sĩ nếu bạn đang gặp khó khăn.</p>
+            <p style="margin-top: 20px;">© 2026 - Trang thông tin nâng cao nhận thức về nghiện phim người lớn</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll cho các link trong nav
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Thông báo khi tải trang
+        window.onload = function() {
+            console.log("%cCảm ơn bạn đã quan tâm đến sức khỏe của mình.", "color: #3498db; font-size: 14px;");
+        };
+    </script>
+</body>
+</html>
