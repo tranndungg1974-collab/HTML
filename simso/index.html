@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sim VinaPhone Đầu Số - Chốt 385</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            color: #333;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #e60012, #ff4d4d);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(230, 0, 18, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .logo span {
+            color: #ffd700;
+        }
+        
+        h1 {
+            text-align: center;
+            margin: 30px 0 20px;
+            color: #e60012;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 40px;
+            font-size: 1.3rem;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            display: flex;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 18px 25px;
+            border: none;
+            font-size: 1.1rem;
+            outline: none;
+        }
+        
+        .search-box button {
+            background: #e60012;
+            color: white;
+            border: none;
+            padding: 0 40px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .search-box button:hover {
+            background: #c4000f;
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .sim-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .sim-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(230, 0, 18, 0.2);
+        }
+        
+        .sim-header {
+            background: #e60012;
+            color: white;
+            padding: 12px 20px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sim-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            color: #111;
+        }
+        
+        .sim-info {
+            padding: 20px;
+        }
+        
+        .price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #e60012;
+            margin: 10px 0;
+        }
+        
+        .old-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #e60012, #ff4d4d);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ffd700;
+            color: #111;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        
+        footer {
+            background: #222;
+            color: #ccc;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 80px;
+        }
+        
+        .vina-logo {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #e60012;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="vina-logo">V</span>inaSim
+                </div>
+                <div>
+                    <h2 style="font-size: 1.4rem;">Sim VinaPhone - Chốt 385</h2>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>🔥 SIM VINAPHONE ĐẦU SỐ - CHỐT 385 🔥</h1>
+        <p class="subtitle">Hàng trăm sim đẹp kết thúc bằng <strong>385</strong> - Giá tốt nhất thị trường</p>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Tìm sim theo số hoặc giá...">
+            <button onclick="searchSim()">Tìm Kiếm</button>
+        </div>
+
+        <div class="sim-grid" id="simGrid">
+            <!-- Sim cards will be generated by JavaScript -->
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>VinaSim.vn</strong> - Website mô phỏng | Sim VinaPhone chính hãng</p>
+        <p>Hotline: 1800 6855 | Zalo: 098x xxx 385</p>
+    </footer>
+
+    <script>
+        const simData = [
+            {
+                number: "0983 456 385",
+                price: "1.250.000",
+                oldPrice: "1.800.000",
+                type: "Sim VIP",
+                status: "Còn hàng"
+            },
+            {
+                number: "0912 789 385",
+                price: "850.000",
+                oldPrice: "1.200.000",
+                type: "Sim Đẹp",
+                status: "Còn hàng"
+            },
+            {
+                number: "0945 123 385",
+                price: "2.450.000",
+                oldPrice: "3.200.000",
+                type: "Sim Thần Tài",
+                status: "Hot"
+            },
+            {
+                number: "0886 567 385",
+                price: "650.000",
+                oldPrice: "950.000",
+                type: "Sim Cơ Bản",
+                status: "Còn hàng"
+            },
+            {
+                number: "0978 901 385",
+                price: "1.680.000",
+                oldPrice: "2.100.000",
+                type: "Sim Lộc Phát",
+                status: "Hot"
+            },
+            {
+                number: "0987 234 385",
+                price: "980.000",
+                oldPrice: "1.450.000",
+                type: "Sim Đẹp",
+                status: "Còn hàng"
+            },
+            {
+                number: "0911 345 385",
+                price: "3.200.000",
+                oldPrice: "4.500.000",
+                type: "Sim Siêu Vip",
+                status: "Hot"
+            },
+            {
+                number: "0948 678 385",
+                price: "750.000",
+                oldPrice: "1.100.000",
+                type: "Sim Đẹp",
+                status: "Còn hàng"
+            }
+        ];
+
+        function createSimCard(sim) {
+            const card = document.createElement('div');
+            card.className = 'sim-card';
+            card.innerHTML = `
+                <div class="sim-header">
+                    <span>VinaPhone</span>
+                    <span style="font-size: 0.9rem; opacity: 0.9;">${sim.type}</span>
+                </div>
+                <div class="sim-number">${sim.number}</div>
+                <div class="sim-info">
+                    <p style="color: #28a745; font-weight: 500;">${sim.status}</p>
+                    <div class="price">${sim.price}đ</div>
+                    <div class="old-price">${sim.oldPrice}đ</div>
+                    <a href="#" onclick="muaSim('${sim.number}'); return false;" class="btn">MUA NGAY</a>
+                </div>
+            `;
+            return card;
+        }
+
+        function renderSims(filteredSims) {
+            const grid = document.getElementById('simGrid');
+            grid.innerHTML = '';
+            filteredSims.forEach(sim => {
+                grid.appendChild(createSimCard(sim));
+            });
+        }
+
+        function searchSim() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (!keyword) {
+                renderSims(simData);
+                return;
+            }
+            
+            const filtered = simData.filter(sim => 
+                sim.number.toLowerCase().includes(keyword)
+            );
+            renderSims(filtered);
+        }
+
+        function muaSim(number) {
+            alert(`✅ Đã thêm sim ${number} vào giỏ hàng!\n\nVui lòng liên hệ Zalo/Hotline để chốt đơn.`);
+        }
+
+        // Khởi tạo
+        window.onload = function() {
+            renderSims(simData);
+            
+            // Enter key support
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchSim();
+                }
+            });
+        };
+    </script>
+</body>
+</html>
