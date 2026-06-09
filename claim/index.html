@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Contract Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+       .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+       .subtitle {
+            color: #666;
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+       .status {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+       .status.info { background: #e3f2fd; color: #1565c0; }
+       .status.success { background: #e8f5e9; color: #2e7d32; }
+       .status.error { background: #ffebee; color: #c62828; }
+       .status.warning { background: #fff3e0; color: #ef6c00; }
+        button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+       .btn-connect {
+            background: #8247e5;
+            color: white;
+        }
+       .btn-connect:hover { background: #6c35d0; transform: translateY(-2px); }
+       .btn-claim {
+            background: #10b981;
+            color: white;
+            margin-top: 12px;
+        }
+       .btn-claim:hover { background: #059669; transform: translateY(-2px); }
+        button:disabled {
+            background: #e0e0e0;
+            color: #9e9e9e;
+            cursor: not-allowed;
+            transform: none;
+        }
+       .address {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+            margin-top: 8px;
+        }
+       .hidden { display: none; }
+       .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #8247e5;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Contract Claim</h1>
+        <p class="subtitle">Polygon Mainnet</p>
+
+        <div id="status" class="status info">
+            Kết nối ví để kiểm tra quyền truy cập
+        </div>
+
+        <button id="connectBtn" class="btn-connect">Kết nối MetaMask</button>
+
+        <div id="ownerSection" class="hidden">
+            <button id="claimBtn" class="btn-claim">Claim ngay</button>
+            <div class="address">Ví của bạn: <span id="userAddress"></span></div>
+        </div>
+
+        <div id="notOwnerSection" class="hidden">
+            <div class="status warning">
+                Ví này không phải owner của contract. Bạn không có quyền thực hiện claim.
+                <div class="address">Ví của bạn: <span id="userAddress2"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CONTRACT_ADDRESS = '0xd4f0d1c37407dc7f878f3fb42d3558f10e366ab5';
+        const POLYGON_CHAIN_ID = '0x89'; // 137
+
+        // ABI tối thiểu: owner() và claim()
+        const CONTRACT_ABI = [
+            "function owner() view returns (address)",
+            "function claim()" // 0x4e71d92d
+        ];
+
+        let provider, signer, contract, userAddress;
+
+        const statusEl = document.getElementById('status');
+        const connectBtn = document.getElementById('connectBtn');
+        const ownerSection = document.getElementById('ownerSection');
+        const notOwnerSection = document.getElementById('notOwnerSection');
+        const claimBtn = document.getElementById('claimBtn');
+
+        function setStatus(msg, type = 'info') {
+            statusEl.className = `status ${type}`;
+            statusEl.innerHTML = msg;
+        }
+
+        function shortAddress(addr) {
+            return addr.slice(0, 6) + '...' + addr.slice(-4);
+        }
+
+        async function connectWallet() {
+            try {
+                if (!window.ethereum) {
+                    setStatus('Chưa cài MetaMask. Vui lòng cài tại metamask.io', 'error');
+                    return;
+                }
+
+                setStatus('<span class="loader"></span>Đang kết nối...', 'info');
+                connectBtn.disabled = true;
+
+                // Yêu cầu kết nối
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                provider = new ethers.BrowserProvider(window.ethereum);
+                signer = await provider.getSigner();
+                userAddress = await signer.getAddress();
+
+                // Check mạng Polygon
+                const network = await provider.getNetwork();
+                if (network.chainId!== 137n) {
+                    setStatus('Sai mạng. Đang chuyển sang Polygon...', 'warning');
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: POLYGON_CHAIN_ID }],
+                        });
+                    } catch (e) {
+                        setStatus('Vui lòng chuyển sang mạng Polygon Mainnet trong MetaMask', 'error');
+                        connectBtn.disabled = false;
+                        return;
+                    }
+                }
+
+                // Khởi tạo contract
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+                // Check owner
+                setStatus('<span class="loader"></span>Đang kiểm tra quyền owner...', 'info');
+                const ownerAddress = await contract.owner();
+
+                connectBtn.classList.add('hidden');
+
+                if (userAddress.toLowerCase() === ownerAddress.toLowerCase()) {
+                    setStatus(`✅ Xác thực thành công. Bạn là owner của contract.`, 'success');
+                    document.getElementById('userAddress').textContent = shortAddress(userAddress);
+                    ownerSection.classList.remove('hidden');
+                } else {
+                    setStatus(`Bạn đã kết nối ví thành công`, 'info');
+                    document.getElementById('userAddress2').textContent = shortAddress(userAddress);
+                    notOwnerSection.classList.remove('hidden');
+                }
+
+            } catch (err) {
+                console.error(err);
+                setStatus(`Lỗi: ${err.message || 'Kết nối thất bại'}`, 'error');
+                connectBtn.disabled = false;
+            }
+        }
+
+        async function handleClaim() {
+            try {
+                claimBtn.disabled = true;
+                setStatus('<span class="loader"></span>Đang gửi giao dịch claim...', 'info');
+
+                const tx = await contract.claim();
+                setStatus(`Đã gửi TX. Hash: ${tx.hash.slice(0,10)}...`, 'info');
+
+                await tx.wait();
+                setStatus(`✅ Claim thành công! <a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">Xem trên PolygonScan</a>`, 'success');
+                claimBtn.textContent = 'Đã Claim';
+
+            } catch (err) {
+                console.error(err);
+                if (err.code === 'ACTION_REJECTED') {
+                    setStatus('Bạn đã hủy giao dịch', 'warning');
+                } else {
+                    setStatus(`Claim thất bại: ${err.reason || err.message}`, 'error');
+                }
+                claimBtn.disabled = false;
+            }
+        }
+
+        connectBtn.addEventListener('click', connectWallet);
+        claimBtn.addEventListener('click', handleClaim);
+
+        // Auto reconnect nếu đã từng connect
+        if (window.ethereum && window.ethereum.selectedAddress) {
+            connectWallet();
+        }
+
+        // Lắng nghe đổi tài khoản
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', () => window.location.reload());
+            window.ethereum.on('chainChanged', () => window.location.reload());
+        }
+    </script>
+</body>
+</html>
