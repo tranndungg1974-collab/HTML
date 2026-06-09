@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Contract - Public</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0f0f;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #fff;
+        }
+       .card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 440px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 4px;
+            background: linear-gradient(90deg, #A855F7, #EC4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+       .subtitle {
+            color: #888;
+            margin-bottom: 28px;
+            font-size: 13px;
+        }
+       .contract-info {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 24px;
+            font-size: 12px;
+        }
+       .contract-info .label { color: #666; }
+       .contract-info .value {
+            font-family: 'Courier New', monospace;
+            color: #A855F7;
+            word-break: break-all;
+        }
+       .status {
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+       .status.info { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa; }
+       .status.success { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; }
+       .status.error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; }
+       .status.warning { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; }
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+       .btn-connect {
+            background: linear-gradient(90deg, #A855F7, #EC4899);
+            color: white;
+        }
+       .btn-connect:hover { opacity: 0.9; transform: translateY(-1px); }
+       .btn-claim {
+            background: #10b981;
+            color: white;
+            margin-top: 12px;
+        }
+       .btn-claim:hover { background: #059669; }
+        button:disabled {
+            background: #2a2a2a;
+            color: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+       .wallet-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f0f0f;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+       .hidden { display: none; }
+       .loader {
+            border: 2px solid #2a2a2a;
+            border-top: 2px solid #A855F7;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+       .tx-link { color: #A855F7; text-decoration: none; }
+       .tx-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Public Claim</h1>
+        <p class="subtitle">Polygon Mainnet • Method 0x4e71d92d</p>
+
+        <div class="contract-info">
+            <div class="label">Contract</div>
+            <div class="value">0xd4f0d1c37407dc7f878f3fb42d3558f10e366ab5</div>
+        </div>
+
+        <div id="status" class="status info">
+            Kết nối ví để thực hiện claim
+        </div>
+
+        <div id="walletInfo" class="wallet-info hidden">
+            <span>Đã kết nối:</span>
+            <span id="userAddress" style="font-family: 'Courier New', monospace;"></span>
+        </div>
+
+        <button id="connectBtn" class="btn-connect">Kết nối ví</button>
+        <button id="claimBtn" class="btn-claim hidden">Claim ngay</button>
+    </div>
+
+    <script>
+        const CONTRACT_ADDRESS = '0xd4f0d1c37407dc7f878f3fb42d3558f10e366ab5';
+        const POLYGON_CHAIN_ID = '0x89';
+        const CONTRACT_ABI = ["function claim()"]; // 0x4e71d92d
+
+        let provider, signer, contract;
+
+        const statusEl = document.getElementById('status');
+        const connectBtn = document.getElementById('connectBtn');
+        const claimBtn = document.getElementById('claimBtn');
+        const walletInfo = document.getElementById('walletInfo');
+        const userAddressEl = document.getElementById('userAddress');
+
+        function setStatus(msg, type = 'info') {
+            statusEl.className = `status ${type}`;
+            statusEl.innerHTML = msg;
+        }
+
+        function shortAddress(addr) {
+            return addr.slice(0, 6) + '...' + addr.slice(-4);
+        }
+
+        async function ensurePolygon() {
+            const network = await provider.getNetwork();
+            if (network.chainId !== 137n) {
+                setStatus('Đang chuyển sang Polygon...', 'warning');
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: POLYGON_CHAIN_ID }],
+                    });
+                } catch (e) {
+                    if (e.code === 4902) {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{
+                                chainId: POLYGON_CHAIN_ID,
+                                chainName: 'Polygon Mainnet',
+                                nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+                                rpcUrls: ['https://polygon-rpc.com/'],
+                                blockExplorerUrls: ['https://polygonscan.com/']
+                            }],
+                        });
+                    } else {
+                        throw e;
+                    }
+                }
+            }
+        }
+
+        async function connectWallet() {
+            try {
+                if (!window.ethereum) {
+                    setStatus('Vui lòng cài MetaMask hoặc ví Web3 khác', 'error');
+                    return;
+                }
+
+                setStatus('<span class="loader"></span>Đang kết nối...', 'info');
+                connectBtn.disabled = true;
+
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                provider = new ethers.BrowserProvider(window.ethereum);
+                signer = await provider.getSigner();
+                
+                await ensurePolygon();
+                
+                const address = await signer.getAddress();
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+                userAddressEl.textContent = shortAddress(address);
+                walletInfo.classList.remove('hidden');
+                connectBtn.classList.add('hidden');
+                claimBtn.classList.remove('hidden');
+                
+                setStatus('✅ Kết nối thành công. Sẵn sàng claim', 'success');
+
+            } catch (err) {
+                console.error(err);
+                setStatus(`Lỗi: ${err.message || 'Kết nối thất bại'}`, 'error');
+                connectBtn.disabled = false;
+            }
+        }
+
+        async function handleClaim() {
+            try {
+                claimBtn.disabled = true;
+                setStatus('<span class="loader"></span>Đang gửi giao dịch...', 'info');
+
+                const tx = await contract.claim();
+                setStatus(`Đã gửi TX: <a class="tx-link" href="https://polygonscan.com/tx/${tx.hash}" target="_blank">${tx.hash.slice(0,10)}...</a>`, 'info');
+
+                const receipt = await tx.wait();
+                if (receipt.status === 1) {
+                    setStatus(`✅ Claim thành công! <a class="tx-link" href="https://polygonscan.com/tx/${tx.hash}" target="_blank">Xem trên PolygonScan</a>`, 'success');
+                    claimBtn.textContent = 'Đã Claim';
+                } else {
+                    throw new Error('Transaction failed');
+                }
+
+            } catch (err) {
+                console.error(err);
+                if (err.code === 'ACTION_REJECTED') {
+                    setStatus('Bạn đã hủy giao dịch', 'warning');
+                    claimBtn.disabled = false;
+                } else if (err.message.includes('insufficient funds')) {
+                    setStatus('Ví không đủ MATIC để trả gas', 'error');
+                    claimBtn.disabled = false;
+                } else {
+                    setStatus(`Claim thất bại: ${err.reason || err.message}`, 'error');
+                    claimBtn.disabled = false;
+                }
+            }
+        }
+
+        connectBtn.addEventListener('click', connectWallet);
+        claimBtn.addEventListener('click', handleClaim);
+
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', () => window.location.reload());
+            window.ethereum.on('chainChanged', () => window.location.reload());
+        }
+    </script>
+</body>
+</html>
