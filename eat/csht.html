@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Công Trình Trọng Điểm Quốc Gia</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+line-height:1.6;
+}
+
+header{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
+background:linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),
+url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1500&q=80");
+background-size:cover;
+background-position:center;
+}
+
+header h1{
+font-size:4rem;
+color:#38bdf8;
+}
+
+header p{
+max-width:800px;
+font-size:1.2rem;
+margin-top:20px;
+}
+
+section{
+padding:60px 10%;
+}
+
+.title{
+text-align:center;
+font-size:2rem;
+margin-bottom:40px;
+color:#38bdf8;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.card{
+background:#1e293b;
+padding:25px;
+border-radius:15px;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h3{
+color:#38bdf8;
+margin-bottom:10px;
+}
+
+.timeline{
+position:relative;
+max-width:1000px;
+margin:auto;
+}
+
+.step{
+background:#1e293b;
+padding:20px;
+margin:20px 0;
+border-left:5px solid #38bdf8;
+border-radius:10px;
+}
+
+footer{
+padding:30px;
+text-align:center;
+background:#020617;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+}
+
+.stat{
+background:#1e293b;
+padding:20px;
+text-align:center;
+border-radius:15px;
+}
+
+.number{
+font-size:2rem;
+color:#38bdf8;
+font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>CÔNG TRÌNH TRỌNG ĐIỂM</h1>
+<p>
+Hệ thống quản lý và triển khai các dự án hạ tầng có tầm quan trọng lớn,
+đảm bảo chất lượng, tiến độ, an toàn và hiệu quả vận hành lâu dài.
+</p>
+</header>
+
+<section>
+<h2 class="title">Lĩnh Vực Triển Khai</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>🏭 Nhà Máy Công Nghiệp</h3>
+<p>Xây dựng khu công nghiệp, nhà máy sản xuất, trung tâm logistics.</p>
+</div>
+
+<div class="card">
+<h3>🌉 Cầu Đường</h3>
+<p>Hạ tầng giao thông chiến lược kết nối vùng kinh tế trọng điểm.</p>
+</div>
+
+<div class="card">
+<h3>⚡ Năng Lượng</h3>
+<p>Nhà máy điện, điện mặt trời, điện gió và trạm biến áp.</p>
+</div>
+
+<div class="card">
+<h3>📡 Viễn Thông</h3>
+<p>Trung tâm dữ liệu, cáp quang và hạ tầng mạng quốc gia.</p>
+</div>
+
+</div>
+</section>
+
+<section>
+<h2 class="title">Quy Trình Triển Khai</h2>
+
+<div class="timeline">
+
+<div class="step">
+<h3>1. Khảo Sát</h3>
+<p>Đánh giá địa chất, môi trường, hiện trạng khu vực dự án.</p>
+</div>
+
+<div class="step">
+<h3>2. Thiết Kế</h3>
+<p>Lập bản vẽ kỹ thuật, mô hình BIM và dự toán chi phí.</p>
+</div>
+
+<div class="step">
+<h3>3. Thi Công</h3>
+<p>Tổ chức nguồn lực, máy móc và nhân sự để triển khai.</p>
+</div>
+
+<div class="step">
+<h3>4. Giám Sát</h3>
+<p>Kiểm soát chất lượng, tiến độ và an toàn lao động.</p>
+</div>
+
+<div class="step">
+<h3>5. Nghiệm Thu</h3>
+<p>Đánh giá chất lượng trước khi đưa vào vận hành.</p>
+</div>
+
+<div class="step">
+<h3>6. Vận Hành</h3>
+<p>Bảo trì và khai thác hiệu quả công trình.</p>
+</div>
+
+</div>
+</section>
+
+<section>
+<h2 class="title">Chỉ Số Quản Lý</h2>
+
+<div class="stats">
+
+<div class="stat">
+<div class="number">99.9%</div>
+<p>Độ An Toàn</p>
+</div>
+
+<div class="stat">
+<div class="number">24/7</div>
+<p>Giám Sát Công Trình</p>
+</div>
+
+<div class="stat">
+<div class="number">100%</div>
+<p>Kiểm Soát Chất Lượng</p>
+</div>
+
+<div class="stat">
+<div class="number">365</div>
+<p>Ngày Hỗ Trợ/Năm</p>
+</div>
+
+</div>
+</section>
+
+<footer>
+<h3>HỆ THỐNG QUẢN LÝ DỰ ÁN HẠ TẦNG TRỌNG ĐIỂM</h3>
+<p>Thiết kế giao diện HTML/CSS hiện đại - Responsive mọi thiết bị</p>
+</footer>
+
+</body>
+</html>
