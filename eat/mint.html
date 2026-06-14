@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Mint Token 0x758d...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0f1115; color: #e6e6e6; display: flex; justify-content: center; padding: 40px 16px; }
+    .card { background: #1a1d24; padding: 24px; border-radius: 16px; width: 100%; max-width: 480px; border: 1px solid #2a2f3a; }
+    h2 { margin: 0 0 16px; font-size: 22px; }
+    label { display: block; margin: 16px 0 6px; font-weight: 600; font-size: 14px; color: #9aa4b2; }
+    input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #2a2f3a; background: #0f1115; color: #fff; font-size: 15px; box-sizing: border-box; }
+    button { width: 100%; padding: 12px; margin-top: 20px; border: none; border-radius: 10px; background: #8247e5; color: white; font-weight: 600; font-size: 16px; cursor: pointer; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .row { display: flex; gap: 12px; }
+    .status { margin-top: 16px; font-size: 14px; line-height: 1.5; word-break: break-all; }
+    .warn { background: #2a1f00; border: 1px solid #5c4700; padding: 12px; border-radius: 10px; color: #ffcc66; font-size: 13px; margin-bottom: 16px; }
+    a { color: #8ab4f8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Mint Token Polygon</h2>
+    <div class="warn">
+      Hàm `0x40c10f19` = `mint(address)`. Chỉ ví có quyền MINTER mới gọi được. Nếu bạn không phải owner/minter, giao dịch sẽ revert.
+    </div>
+    
+    <div class="row">
+      <button id="connectBtn">Kết nối MetaMask</button>
+    </div>
+    
+    <div id="account" class="status"></div>
+
+    <label>Token Contract</label>
+    <input id="tokenAddress" value="0x758d1ea0935fdc2ad83e791b0bfc7d883697b73b" readonly>
+
+    <label>Địa chỉ nhận token</label>
+    <input id="toAddress" placeholder="0x... ví nhận token">
+
+    <button id="mintBtn" disabled>Mint sang địa chỉ trên</button>
+    
+    <div id="txStatus" class="status"></div>
+  </div>
+
+  <script type="module">
+    import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.0/+esm";
+
+    const POLYGON_CHAIN_ID = "0x89"; // 137
+    const TOKEN_ADDRESS = "0x758d1ea0935fdc2ad83e791b0bfc7d883697b73b";
+    const MINT_SELECTOR = "0x40c10f19";
+    const ABI = [`function mint(address to)`];
+
+    let provider, signer, contract;
+
+    const connectBtn = document.getElementById("connectBtn");
+    const mintBtn = document.getElementById("mintBtn");
+    const accountEl = document.getElementById("account");
+    const txStatus = document.getElementById("txStatus");
+
+    connectBtn.onclick = async () => {
+      if (!window.ethereum) {
+        accountEl.textContent = "Cài MetaMask trước đã bạn.";
+        return;
+      }
+      try {
+        await ethereum.request({ method: "eth_requestAccounts" });
+        
+        // Chuyển mạng Polygon nếu chưa đúng
+        await ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: POLYGON_CHAIN_ID }]
+        }).catch(async (err) => {
+          if (err.code === 4902) {
+            await ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [{
+                chainId: POLYGON_CHAIN_ID,
+                chainName: "Polygon Mainnet",
+                nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+                rpcUrls: ["https://polygon-rpc.com"],
+                blockExplorerUrls: ["https://polygonscan.com"]
+              }]
+            });
+          } else { throw err; }
+        });
+
+        provider = new ethers.BrowserProvider(window.ethereum);
+        signer = await provider.getSigner();
+        contract = new ethers.Contract(TOKEN_ADDRESS, ABI, signer);
+        
+        const addr = await signer.getAddress();
+        accountEl.innerHTML = `Đã kết nối: ${addr.slice(0,6)}...${addr.slice(-4)}`;
+        mintBtn.disabled = false;
+        connectBtn.textContent = "Đã kết nối";
+      } catch (e) {
+        accountEl.textContent = `Lỗi: ${e.message}`;
+      }
+    };
+
+    mintBtn.onclick = async () => {
+      const to = document.getElementById("toAddress").value.trim();
+      if (!ethers.isAddress(to)) {
+        txStatus.textContent = "Địa chỉ nhận không hợp lệ.";
+        return;
+      }
+      
+      mintBtn.disabled = true;
+      txStatus.textContent = "Đang gửi giao dịch...";
+      
+      try {
+        const tx = await contract.mint(to);
+        txStatus.innerHTML = `Đã gửi tx: <a target="_blank" href="https://polygonscan.com/tx/${tx.hash}">${tx.hash}</a><br>Chờ xác nhận...`;
+        await tx.wait();
+        txStatus.innerHTML += "<br><b>Thành công!</b> Token đã được mint.";
+      } catch (e) {
+        txStatus.textContent = `Thất bại: ${e.reason || e.message}`;
+      } finally {
+        mintBtn.disabled = false;
+      }
+    };
+  </script>
+</body>
+</html>
