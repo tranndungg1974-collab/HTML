@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Mint Token Polygon - Multi Contract</title>
+  <title>Mint 21M Token Polygon</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { font-family: system-ui, sans-serif; background: #0f1115; color: #e6e6e6; display: flex; justify-content: center; padding: 40px 16px; }
@@ -19,13 +19,14 @@
     .info { background: #1a2332; border: 1px solid #2a3f5a; padding: 12px; border-radius: 10px; color: #8ab4f8; font-size: 13px; margin-top: 16px; }
     a { color: #8ab4f8; }
     .small-btn { width: auto; padding: 8px 12px; font-size: 13px; margin-top: 8px; }
+    .highlight { color: #00d9ff; font-weight: 700; }
   </style>
 </head>
 <body>
   <div class="card">
     <h2>Mint Token Polygon</h2>
     <div class="warn">
-      Hàm `0x40c10f19` = `mint(address)`. Chỉ ví có quyền MINTER của contract đó mới gọi được. Giao dịch revert nếu không có quyền.
+      Mỗi lần mint = <span class="highlight">21,000,000 token</span>. Chỉ ví có quyền MINTER mới gọi được. Selector: `0x40c10f19` với `mint(address,uint256)`.
     </div>
     
     <div class="row">
@@ -43,7 +44,7 @@
     <label>Địa chỉ nhận token</label>
     <input id="toAddress" placeholder="0x... ví nhận token">
 
-    <button id="mintBtn" disabled>Mint sang địa chỉ trên</button>
+    <button id="mintBtn" disabled>Mint 21M sang địa chỉ trên</button>
     
     <div id="txStatus" class="status"></div>
   </div>
@@ -52,9 +53,17 @@
     import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.13.0/+esm";
 
     const POLYGON_CHAIN_ID = "0x89"; // 137
-    const MINT_ABI = [`function mint(address to)`, `function name() view returns (string)`, `function symbol() view returns (string)`, `function decimals() view returns (uint8)`];
+    const MINT_AMOUNT = 21000000; // 21 triệu token mỗi lần
+    
+    // ABI cho mint(address,uint256) + hàm đọc info
+    const ABI = [
+      `function mint(address to, uint256 amount)`,
+      `function name() view returns (string)`,
+      `function symbol() view returns (string)`,
+      `function decimals() view returns (uint8)`
+    ];
 
-    let provider, signer, contract, currentTokenAddress;
+    let provider, signer, contract, currentDecimals = 18;
 
     const connectBtn = document.getElementById("connectBtn");
     const mintBtn = document.getElementById("mintBtn");
@@ -97,7 +106,6 @@
         accountEl.innerHTML = `Đã kết nối: ${addr.slice(0,6)}...${addr.slice(-4)}`;
         connectBtn.textContent = "Đã kết nối";
         
-        // Auto load contract mặc định
         await loadContract();
       } catch (e) {
         accountEl.textContent = `Lỗi: ${e.message}`;
@@ -120,26 +128,28 @@
       }
 
       try {
-        currentTokenAddress = addr;
-        contract = new ethers.Contract(addr, MINT_ABI, signer);
+        contract = new ethers.Contract(addr, ABI, signer);
         tokenInfoEl.style.display = "block";
         tokenInfoEl.textContent = "Đang load thông tin token...";
         
-        // Thử đọc name, symbol để check contract có đúng ERC20 không
-        const [name, symbol] = await Promise.all([
+        const [name, symbol, decimals] = await Promise.all([
           contract.name().catch(() => "N/A"),
-          contract.symbol().catch(() => "N/A")
+          contract.symbol().catch(() => "N/A"),
+          contract.decimals().catch(() => 18)
         ]);
+        
+        currentDecimals = Number(decimals);
+        const amountWithDecimals = ethers.parseUnits(MINT_AMOUNT.toString(), currentDecimals);
         
         tokenInfoEl.innerHTML = `
           <b>Contract:</b> <a target="_blank" href="https://polygonscan.com/address/${addr}">${addr.slice(0,10)}...${addr.slice(-8)}</a><br>
-          <b>Tên:</b> ${name} | <b>Symbol:</b> ${symbol}<br>
-          <b>Method:</b> mint(address)
+          <b>Token:</b> ${name} (${symbol}) | <b>Decimals:</b> ${currentDecimals}<br>
+          <b>Mint mỗi lần:</b> <span class="highlight">${MINT_AMOUNT.toLocaleString()} ${symbol}</span>
         `;
         mintBtn.disabled = false;
         txStatus.textContent = "";
       } catch (e) {
-        tokenInfoEl.textContent = `Không load được contract. Check lại địa chỉ hoặc ABI. Lỗi: ${e.message}`;
+        tokenInfoEl.textContent = `Không load được contract. Đảm bảo contract có hàm mint(address,uint256). Lỗi: ${e.message}`;
         mintBtn.disabled = true;
       }
     }
@@ -162,10 +172,12 @@
       txStatus.textContent = "Đang gửi giao dịch...";
       
       try {
-        const tx = await contract.mint(to);
+        // Tính amount = 21M * 10^decimals
+        const amount = ethers.parseUnits(MINT_AMOUNT.toString(), currentDecimals);
+        const tx = await contract.mint(to, amount);
         txStatus.innerHTML = `Đã gửi tx: <a target="_blank" href="https://polygonscan.com/tx/${tx.hash}">${tx.hash}</a><br>Chờ xác nhận...`;
         await tx.wait();
-        txStatus.innerHTML += "<br><b>Thành công!</b> Token đã được mint.";
+        txStatus.innerHTML += `<br><b>Thành công!</b> Đã mint ${MINT_AMOUNT.toLocaleString()} token.`;
       } catch (e) {
         txStatus.textContent = `Thất bại: ${e.reason || e.message}`;
         console.error(e);
