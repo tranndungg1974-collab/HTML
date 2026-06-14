@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản Lý Ca Ăn Bảo Vệ 24/7</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+color:#38bdf8;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 0 15px rgba(0,0,0,0.3);
+}
+
+input,select,button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+}
+
+button{
+background:#38bdf8;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#0ea5e9;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+padding:12px;
+text-align:center;
+border:1px solid #334155;
+}
+
+th{
+background:#0284c7;
+}
+
+tr:nth-child(even){
+background:#1e293b;
+}
+
+.status{
+margin-top:15px;
+padding:10px;
+background:#065f46;
+border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🛡️ HỆ THỐNG CHIA CA ĂN BẢO VỆ 24/7</h1>
+
+<div class="card">
+
+<label>Số lượng bảo vệ trong ca:</label>
+<input type="number" id="guards" value="6">
+
+<label>Giờ bắt đầu ca:</label>
+<input type="time" id="startTime" value="06:30">
+
+<label>Giờ kết thúc ca:</label>
+<input type="time" id="endTime" value="18:30">
+
+<label>Thời gian ăn mỗi người (phút):</label>
+<input type="number" id="mealDuration" value="30">
+
+<button onclick="generateSchedule()">
+Tạo Lịch Ăn
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Lịch Phân Công</h2>
+
+<table id="scheduleTable">
+<thead>
+<tr>
+<th>Nhân viên</th>
+<th>Giờ Ăn</th>
+<th>Trạng Thái</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+<div class="status" id="status"></div>
+
+</div>
+
+</div>
+
+<script>
+
+function addMinutes(time, mins){
+
+let [h,m] = time.split(':').map(Number);
+
+let total = h*60+m+mins;
+
+let hh = Math.floor(total/60)%24;
+let mm = total%60;
+
+return hh.toString().padStart(2,'0')
++ ":" +
+mm.toString().padStart(2,'0');
+
+}
+
+function generateSchedule(){
+
+let guards =
+parseInt(document.getElementById('guards').value);
+
+let startTime =
+document.getElementById('startTime').value;
+
+let mealDuration =
+parseInt(document.getElementById('mealDuration').value);
+
+let tbody =
+document.querySelector('#scheduleTable tbody');
+
+tbody.innerHTML='';
+
+let current = startTime;
+
+for(let i=1;i<=guards;i++){
+
+let endMeal =
+addMinutes(current,mealDuration);
+
+let row=`
+<tr>
+<td>Bảo vệ ${i}</td>
+<td>${current} → ${endMeal}</td>
+<td>Ăn / Nghỉ</td>
+</tr>
+`;
+
+tbody.innerHTML += row;
+
+current=endMeal;
+}
+
+document.getElementById('status').innerHTML=
+`
+✅ Đã chia lịch ăn cho ${guards} nhân viên.<br>
+🛡️ Luôn còn ${guards-1} người trực trong thời gian một người đi ăn.
+`;
+
+}
+
+generateSchedule();
+
+</script>
+
+</body>
+</html>
