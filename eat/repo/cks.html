@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Trình tạo & Tải xuống mẫu chữ ký số</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none; /* prevent accidental text selection while drawing */
+        }
+
+        body {
+            background: linear-gradient(145deg, #e9eef3 0%, #d4dfe9 100%);
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            max-width: 860px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(0px);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .header {
+            background: #1f2b38;
+            padding: 1.5rem 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.9rem;
+            letter-spacing: -0.3px;
+        }
+
+        .header p {
+            margin: 0.5rem 0 0;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 2rem 2rem 1.8rem;
+        }
+
+        .canvas-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fefcf5;
+            border-radius: 1.8rem;
+            padding: 1.5rem;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05), 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            background: white;
+            border-radius: 1.2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 0 0 2px #fff, 0 0 0 4px #cbd5e1;
+            cursor: crosshair;
+            touch-action: none; /* improve drawing on touch */
+            width: 100%;
+            height: auto;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        button, .download-btn {
+            background: #2c3e4e;
+            border: none;
+            padding: 0.7rem 1.4rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 3rem;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-family: inherit;
+        }
+
+        button i, .download-btn i {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        button:hover, .download-btn:hover {
+            background: #1d2c38;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        .btn-clear {
+            background: #9e2d2f;
+        }
+        .btn-clear:hover {
+            background: #7e2325;
+        }
+
+        .btn-download {
+            background: #1f6e43;
+        }
+        .btn-download:hover {
+            background: #155a38;
+        }
+
+        .size-slider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #eef2f5;
+            padding: 0.3rem 1rem;
+            border-radius: 3rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .size-slider label {
+            font-weight: 600;
+            color: #1f2b38;
+        }
+
+        input[type="range"] {
+            width: 140px;
+            cursor: pointer;
+        }
+
+        .pen-width-value {
+            background: #2c3e4e;
+            color: white;
+            padding: 0.2rem 0.7rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .info-note {
+            margin-top: 1.8rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #4b5563;
+            background: #f1f5f9;
+            padding: 0.7rem;
+            border-radius: 2rem;
+        }
+
+        footer {
+            background: #f8fafc;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.75rem;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        @media (max-width: 600px) {
+            .content {
+                padding: 1.2rem;
+            }
+            .toolbar {
+                gap: 0.5rem;
+            }
+            button, .download-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="header">
+        <h1>✍️ Chữ ký số • lưu mẫu</h1>
+        <p>Vẽ trực tiếp | Tải xuống ngay mẫu chữ ký (PNG trong suốt)</p>
+    </div>
+    <div class="content">
+        <div class="canvas-area">
+            <canvas id="signatureCanvas" width="700" height="250" style="width:100%; height:auto; max-width:700px; aspect-ratio:700/250"></canvas>
+            <div class="toolbar">
+                <button id="clearBtn" class="btn-clear">🗑️ Xóa trắng</button>
+                <div class="size-slider">
+                    <label>✒️ Nét</label>
+                    <input type="range" id="penWidth" min="2" max="20" step="1" value="3">
+                    <span id="widthValue" class="pen-width-value">3px</span>
+                </div>
+                <button id="downloadBtn" class="btn-download">⬇️ Tải chữ ký (PNG)</button>
+            </div>
+        </div>
+        <div class="info-note">
+            💡 Kéo / vẽ chuột hoặc cảm ứng để tạo chữ ký. Nền trong suốt, lưu dưới dạng ảnh PNG chất lượng cao.
+            Nhấn "Tải chữ ký" để lưu mẫu ngay lập tức.
+        </div>
+    </div>
+    <footer>
+        Chữ ký số mẫu | Lưu và sử dụng cho văn bản điện tử
+    </footer>
+</div>
+
+<script>
+    (function(){
+        // Lấy canvas element
+        const canvas = document.getElementById('signatureCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Kích thước thực tế của canvas (pixel rời rạc)
+        // Thiết lập kích thước cố định 700x250 để đẹp
+        canvas.width = 700;
+        canvas.height = 250;
+
+        // Biến trạng thái vẽ
+        let drawing = false;
+        let lastX = 0, lastY = 0;
+
+        // Cấu hình nét vẽ
+        let currentWidth = 3;   // mặc định 3px
+        const penWidthSlider = document.getElementById('penWidth');
+        const widthSpan = document.getElementById('widthValue');
+
+        // Hàm cập nhật độ rộng nét bút
+        function updatePenWidth(){
+            currentWidth = parseInt(penWidthSlider.value, 10);
+            widthSpan.innerText = currentWidth + 'px';
+        }
+        penWidthSlider.addEventListener('input', updatePenWidth);
+        updatePenWidth();
+
+        // --- Khởi tạo nền trong suốt: Xóa toàn bộ canvas với nền trong suốt ---
+        function clearCanvas() {
+            // Xóa toàn bộ vùng vẽ, đặt trong suốt
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // (Không fill nền, giữ trong suốt)
+        }
+
+        // Gọi clear lúc đầu để đảm bảo canvas trong suốt
+        clearCanvas();
+
+        // Hàm bắt đầu vẽ
+        function startDrawing(e) {
+            drawing = true;
+            const pos = getCoordinates(e);
+            lastX = pos.x;
+            lastY = pos.y;
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            // Vẽ một chấm nhỏ khi bắt đầu (tạo nét liền)
+            ctx.lineTo(lastX, lastY);
+            ctx.strokeStyle = '#0a0c10';    // Màu đen đậm, giống mực chữ ký
+            ctx.lineWidth = currentWidth;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            e.preventDefault();
+            const pos = getCoordinates(e);
+            const currentX = pos.x;
+            const currentY = pos.y;
+
+            ctx.strokeStyle = '#0a0c10';
+            ctx.lineWidth = currentWidth;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(currentX, currentY);
+            ctx.stroke();
+
+            lastX = currentX;
+            lastY = currentY;
+        }
+
+        function endDrawing() {
+            drawing = false;
+            ctx.beginPath(); // reset path để tránh nối tiếp
+        }
+
+        // Lấy tọa độ chuột / cảm ứng chính xác trên canvas
+        function getCoordinates(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;   // canvas thực tế 700 / chiều rộng hiển thị
+            const scaleY = canvas.height / rect.height;
+
+            let clientX, clientY;
+            if (e.touches) {
+                // Sự kiện cảm ứng
+                if (e.touches.length === 0) return { x: lastX, y: lastY };
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            let canvasX = (clientX - rect.left) * scaleX;
+            let canvasY = (clientY - rect.top) * scaleY;
+
+            // Giới hạn trong canvas
+            canvasX = Math.min(Math.max(0, canvasX), canvas.width);
+            canvasY = Math.min(Math.max(0, canvasY), canvas.height);
+            return { x: canvasX, y: canvasY };
+        }
+
+        // ---- Gắn sự kiện chuột & cảm ứng ----
+        // Chuột
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', endDrawing);
+        canvas.addEventListener('mouseleave', endDrawing);
+
+        // Cảm ứng (touch)
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+            });
+            canvas.dispatchEvent(mouseEvent);
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+            });
+            canvas.dispatchEvent(mouseEvent);
+        });
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            const mouseEvent = new MouseEvent('mouseup', {});
+            canvas.dispatchEvent(mouseEvent);
+        });
+        canvas.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            const mouseEvent = new MouseEvent('mouseup', {});
+            canvas.dispatchEvent(mouseEvent);
+        });
+
+        // Nút xóa trắng (reset canvas trong suốt)
+        const clearBtn = document.getElementById('clearBtn');
+        clearBtn.addEventListener('click', () => {
+            clearCanvas();
+        });
+
+        // ---- Tải xuống ngay mẫu chữ ký dưới dạng PNG (nền trong suốt) ----
+        const downloadBtn = document.getElementById('downloadBtn');
+        
+        function downloadSignature() {
+            try {
+                // Tạo một canvas tạm thời nếu cần? không cần, export trực tiếp canvas chính
+                // Lưu ý: canvas của chúng ta đã có nền trong suốt, tuyệt vời cho chữ ký.
+                const dataURL = canvas.toDataURL('image/png');
+                // Tạo thẻ tải xuống
+                const link = document.createElement('a');
+                const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
+                link.download = `chữ_ky_mau_${timestamp}.png`;
+                link.href = dataURL;
+                link.click();
+            } catch (err) {
+                console.error("Lỗi xuất ảnh:", err);
+                alert("Không thể tạo ảnh. Hãy thử lại.");
+            }
+        }
+
+        downloadBtn.addEventListener('click', downloadSignature);
+
+        // Tính năng phụ: có thể kích thước nét thay đổi trong khi vẽ (tác động ngay)
+        // Khi thay đổi thanh trượt, nó sẽ cập nhật lineWidth cho những nét tiếp theo,
+        // không làm gián đoạn nét trước đó - đúng ý đồ.
+        // Để hiển thị giá trị nét động, cũng đã có.
+
+        // Đảm bảo rằng nếu người dùng chưa vẽ gì và tải xuống, sẽ là ảnh trắng trong suốt (hợp lý)
+        // có thể thêm 1 dòng hint nhỏ nhưng không cần.
+        // Thêm vào tiện ích: ngăn right-click trên canvas để tránh menu chuột (không ảnh hưởng)
+        canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+        
+        // Optional: Khôi phục nếu bị lỗi scaling do resize window (không ảnh hưởng vì kích thước canvas cố định)
+        // Đối với thiết bị di động, việc sử dụng aspect-ratio giữ tỉ lệ 700/250, nhưng tọa độ được tính toán scaleX, scaleY chính xác.
+        // Đảm bảo khi thay đổi kích thước cửa sổ thì canvas hiển thị co dãn nhưng vùng vẽ vẫn mapping chuẩn nhờ getBoundingClientRect mỗi lần.
+        // Kiểm tra thêm khi load lần đầu, nếu cần force clear và hiện thông báo.
+        window.addEventListener('resize', () => {
+            // Không cần làm gì thêm nhưng để tránh sai lệch do tỉ lệ, nhưng getCoordinates sẽ cập nhật mỗi lần dùng rect mới.
+            // Tuy nhiên canvas gốc vẫn giữ nguyên pixel, nên mọi thứ OK.
+        });
+
+        // Thêm chức năng "thử mẫu" hoặc nhúng sẵn một chữ ký mẫu? có thể vẽ một dòng chữ nhẹ "ký tên" như demo
+        // Nhưng để trắng hoàn toàn cũng tốt. Tuy nhiên có thể vẽ một hướng dẫn mờ nếu không có chữ ký?
+        // Tốt nhất là để người dùng tự do tạo. Không thêm watermark mờ.
+        // Nhưng thêm 1 nút gợi ý mẫu chữ ký demo? Có thể không cần.
+        // Tuy nhiên để thân thiện, thêm một tùy chọn "ký mẫu" nhanh? Giữ đơn giản, chỉ cần tải được chữ ký.
+        // Bổ sung tính năng: phím tắt? không cần thiết.
+
+        // Ngoài ra, đảm bảo rằng khi chạy lần đầu không bị lỗi do nhấn nút tải mà chưa vẽ -> ảnh trong suốt ok.
+        // Thêm một function thông báo nếu canvas trống? Không cần, người dùng có thể tải ảnh trắng và sẽ quay lại ký.
+        console.log("Sẵn sàng tạo & tải chữ ký số với nền trong suốt");
+    })();
+</script>
+</body>
+</html>
