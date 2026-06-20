@@ -1,0 +1,191 @@
+"<!DOCTYPE html>
+<html lang=""vi"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>Mint Token BSC</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0c0c0c;
+            color: #fff;
+        }
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        h1 { margin-top: 0; font-size: 24px; }
+        .row { margin: 16px 0; }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            color: #aaa; 
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #0c0c0c;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #f0b90b;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        button:hover { background: #f8d12f; }
+        button:disabled { 
+            background: #333; 
+            color: #666; 
+            cursor: not-allowed; 
+        }
+        .info {
+            background: #1e1e1e;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #888;
+            word-break: break-all;
+        }
+        .status { 
+            margin-top: 16px; 
+            padding: 12px; 
+            border-radius: 8px;
+            display: none;
+        }
+        .success { background: #0a3622; color: #4ade80; display: block; }
+        .error { background: #3f1a1a; color: #f87171; display: block; }
+    </style>
+</head>
+<body>
+    <div class=""card"">
+        <h1>Mint Token BSC</h1>
+        <div class=""info"">
+            <strong>Contract:</strong> 0x79404d7a565f6f7f4e5174dd3964359f7e37bfa2<br>
+            <strong>Method:</strong> mint (0x40c10f19)
+        </div>
+
+        <div class=""row"">
+            <button id=""connectBtn"">Kết nối ví MetaMask</button>
+            <div id=""wallet"" class=""info"" style=""display:none; margin-top:12px;""></div>
+        </div>
+
+        <div id=""mintForm"" style=""display:none;"">
+            <div class=""row"">
+                <label>Địa chỉ nhận token (address)</label>
+                <input type=""text"" id=""toAddress"" placeholder=""0x..."">
+            </div>
+            <div class=""row"">
+                <label>Số lượng mint (uint256)</label>
+                <input type=""text"" id=""amount"" placeholder=""1000000000000000000"">
+                <small style=""color:#666"">VD: 1 token = 1000000000000000000 nếu decimals = 18</small>
+            </div>
+            <button id=""mintBtn"">Mint Token</button>
+        </div>
+
+        <div id=""status"" class=""status""></div>
+    </div>
+
+    <script src=""https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js""></script>
+    <script>
+        const CONTRACT_ADDRESS = ""0x79404d7a565f6f7f4e5174dd3964359f7e37bfa2"";
+        const BSC_CHAIN_ID = ""0x38""; // 56
+        
+        // ABI chỉ cần hàm mint. Tham số thực tế bạn check lại trên bscscan tab Write Contract
+        // Thường mint(address to, uint256 amount) nhưng có contract khác
+        const ABI = [
+            ""function mint(address to, uint256 amount) public""
+        ];
+
+        let provider, signer, contract;
+
+        const connectBtn = document.getElementById('connectBtn');
+        const mintBtn = document.getElementById('mintBtn');
+        const walletDiv = document.getElementById('wallet');
+        const mintForm = document.getElementById('mintForm');
+        const statusDiv = document.getElementById('status');
+
+        connectBtn.onclick = async () => {
+            if (!window.ethereum) {
+                showStatus('Cài MetaMask trước nhé', true);
+                return;
+            }
+            try {
+                provider = new ethers.BrowserProvider(window.ethereum);
+                await provider.send(""eth_requestAccounts"", []);
+                
+                // Check mạng BSC
+                const network = await provider.getNetwork();
+                if (network.chainId !== 56n) {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: BSC_CHAIN_ID }],
+                    });
+                }
+
+                signer = await provider.getSigner();
+                const address = await signer.getAddress();
+                contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+
+                walletDiv.innerHTML = `<strong>Đã kết nối:</strong> ${address}`;
+                walletDiv.style.display = 'block';
+                mintForm.style.display = 'block';
+                connectBtn.style.display = 'none';
+            } catch (err) {
+                showStatus('Lỗi kết nối: ' + err.message, true);
+            }
+        };
+
+        mintBtn.onclick = async () => {
+            const to = document.getElementById('toAddress').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+            
+            if (!ethers.isAddress(to)) {
+                showStatus('Địa chỉ nhận không hợp lệ', true);
+                return;
+            }
+            if (!amount) {
+                showStatus('Nhập số lượng mint', true);
+                return;
+            }
+
+            try {
+                mintBtn.disabled = true;
+                mintBtn.innerText = 'Đang gửi giao dịch...';
+                
+                const tx = await contract.mint(to, amount);
+                showStatus(`Đã gửi tx: ${tx.hash}. Chờ confirm...`);
+                
+                await tx.wait();
+                showStatus(`Mint thành công! TxHash: ${tx.hash}`);
+            } catch (err) {
+                showStatus('Lỗi: ' + (err.reason || err.message), true);
+            } finally {
+                mintBtn.disabled = false;
+                mintBtn.innerText = 'Mint Token';
+            }
+        };
+
+        function showStatus(msg, isError = false) {
+            statusDiv.innerText = msg;
+            statusDiv.className = 'status ' + (isError ? 'error' : 'success');
+        }
+    </script>
+</body>
+</html>"
