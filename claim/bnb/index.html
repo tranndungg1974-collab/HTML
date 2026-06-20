@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mint Token BSC</title>
+    <title>Create Asset Token - BSC</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
+            max-width: 700px;
+            margin: 40px auto;
             padding: 20px;
             background: #0c0c0c;
             color: #fff;
@@ -20,14 +20,20 @@
             padding: 24px;
         }
         h1 { margin-top: 0; font-size: 24px; }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
         .row { margin: 16px 0; }
+        .row.full { grid-column: 1 / -1; }
         label { 
             display: block; 
             margin-bottom: 8px; 
             color: #aaa; 
             font-size: 14px;
         }
-        input {
+        input, select {
             width: 100%;
             padding: 12px;
             background: #0c0c0c;
@@ -36,6 +42,10 @@
             color: #fff;
             font-size: 16px;
             box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #f0b90b;
         }
         button {
             width: 100%;
@@ -62,6 +72,7 @@
             font-size: 13px;
             color: #888;
             word-break: break-all;
+            line-height: 1.6;
         }
         .status { 
             margin-top: 16px; 
@@ -71,14 +82,28 @@
         }
         .success { background: #0a3622; color: #4ade80; display: block; }
         .error { background: #3f1a1a; color: #f87171; display: block; }
+        .warning { background: #3f2f1a; color: #fbbf24; display: block; }
+        .badge {
+            display: inline-block;
+            background: #f0b90b;
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
     <div class="card">
-        <h1>Mint Token BSC</h1>
+        <h1>Create Asset Token</h1>
         <div class="info">
-            <strong>Contract:</strong> 0x79404d7a565f6f7f4e5174dd3964359f7e37bfa2<br>
-            <strong>Method:</strong> mint (0x40c10f19)
+            <strong>Factory:</strong> 0x2db68176acf5c969269bbab8e02e4979ba46a337<br>
+            <strong>Method:</strong> createAssetToken (0x18ee1c43)<br>
+            <strong>Network:</strong> BSC Mainnet
         </div>
 
         <div class="row">
@@ -86,17 +111,39 @@
             <div id="wallet" class="info" style="display:none; margin-top:12px;"></div>
         </div>
 
-        <div id="mintForm" style="display:none;">
-            <div class="row">
-                <label>Địa chỉ nhận token (address)</label>
-                <input type="text" id="toAddress" placeholder="0x...">
+        <div id="createForm" style="display:none;">
+            <div class="grid">
+                <div class="row">
+                    <label>Token Name *</label>
+                    <input type="text" id="tokenName" placeholder="VD: My Asset Token">
+                </div>
+                <div class="row">
+                    <label>Token Symbol *</label>
+                    <input type="text" id="tokenSymbol" placeholder="VD: MAT" maxlength="11">
+                </div>
+                <div class="row">
+                    <label>Initial Supply <span class="badge">Default: 21M</span></label>
+                    <input type="number" id="initialSupply" value="21000000" step="any">
+                    <small style="color:#666; display:block; margin-top:6px;">Decimals mặc định: 18</small>
+                </div>
+                <div class="row">
+                    <label>Decimals</label>
+                    <select id="decimals">
+                        <option value="18" selected>18 - Chuẩn ERC20</option>
+                        <option value="6">6 - Như USDT/USDC</option>
+                        <option value="8">8 - Như WBTC</option>
+                        <option value="0">0 - Không chia nhỏ</option>
+                    </select>
+                </div>
+                <div class="row full">
+                    <label>Địa chỉ nhận token *</label>
+                    <input type="text" id="toAddress" placeholder="0x... để trống sẽ dùng ví của bạn">
+                    <small style="color:#666; display:block; margin-top:6px;" id="supplyWei"></small>
+                </div>
             </div>
-            <div class="row">
-                <label>Số lượng mint (uint256)</label>
-                <input type="text" id="amount" placeholder="1000000000000000000">
-                <small style="color:#666">VD: 1 token = 1000000000000000000 nếu decimals = 18</small>
-            </div>
-            <button id="mintBtn">Mint Token</button>
+            
+            <button id="createBtn">Tạo Asset Token</button>
+            <div id="result" class="info" style="display:none; margin-top:16px;"></div>
         </div>
 
         <div id="status" class="status"></div>
@@ -104,33 +151,37 @@
 
     <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
     <script>
-        const CONTRACT_ADDRESS = "0x79404d7a565f6f7f4e5174dd3964359f7e37bfa2";
-        const BSC_CHAIN_ID = "0x38"; // 56
+        const FACTORY_ADDRESS = "0x2db68176acf5c969269bbab8e02e4979ba46a337";
+        const BSC_CHAIN_ID = "0x38";
         
-        // ABI chỉ cần hàm mint. Tham số thực tế bạn check lại trên bscscan tab Write Contract
-        // Thường mint(address to, uint256 amount) nhưng có contract khác
+        // ABI phổ biến cho createAssetToken. Nếu contract khác thì sửa lại
+        // 4 params: name, symbol, initialSupply, to
         const ABI = [
-            "function mint(address to, uint256 amount) public"
+            "function createAssetToken(string name, string symbol, uint256 initialSupply, address to) returns (address)",
+            "event AssetTokenCreated(address indexed token, address indexed creator, string name, string symbol, uint256 initialSupply)"
         ];
 
         let provider, signer, contract;
 
         const connectBtn = document.getElementById('connectBtn');
-        const mintBtn = document.getElementById('mintBtn');
+        const createBtn = document.getElementById('createBtn');
         const walletDiv = document.getElementById('wallet');
-        const mintForm = document.getElementById('mintForm');
+        const createForm = document.getElementById('createForm');
         const statusDiv = document.getElementById('status');
+        const resultDiv = document.getElementById('result');
+        const supplyInput = document.getElementById('initialSupply');
+        const decimalsSelect = document.getElementById('decimals');
+        const supplyWei = document.getElementById('supplyWei');
 
         connectBtn.onclick = async () => {
             if (!window.ethereum) {
-                showStatus('Cài MetaMask trước nhé', true);
+                showStatus('Cài MetaMask trước nhé', 'error');
                 return;
             }
             try {
                 provider = new ethers.BrowserProvider(window.ethereum);
                 await provider.send("eth_requestAccounts", []);
                 
-                // Check mạng BSC
                 const network = await provider.getNetwork();
                 if (network.chainId !== 56n) {
                     await window.ethereum.request({
@@ -141,50 +192,108 @@
 
                 signer = await provider.getSigner();
                 const address = await signer.getAddress();
-                contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+                contract = new ethers.Contract(FACTORY_ADDRESS, ABI, signer);
 
                 walletDiv.innerHTML = `<strong>Đã kết nối:</strong> ${address}`;
                 walletDiv.style.display = 'block';
-                mintForm.style.display = 'block';
+                createForm.style.display = 'block';
                 connectBtn.style.display = 'none';
+                
+                // Auto fill địa chỉ nhận
+                document.getElementById('toAddress').value = address;
+                updateSupplyWei();
             } catch (err) {
-                showStatus('Lỗi kết nối: ' + err.message, true);
+                showStatus('Lỗi kết nối: ' + err.message, 'error');
             }
         };
 
-        mintBtn.onclick = async () => {
-            const to = document.getElementById('toAddress').value.trim();
-            const amount = document.getElementById('amount').value.trim();
+        function updateSupplyWei() {
+            const val = parseFloat(supplyInput.value || 0);
+            const dec = parseInt(decimalsSelect.value);
+            if (val > 0) {
+                try {
+                    const wei = ethers.parseUnits(val.toString(), dec);
+                    supplyWei.innerText = `Total Supply: ${wei.toString()} wei`;
+                } catch(e) {
+                    supplyWei.innerText = '';
+                }
+            } else {
+                supplyWei.innerText = '';
+            }
+        }
+
+        supplyInput.oninput = updateSupplyWei;
+        decimalsSelect.onchange = updateSupplyWei;
+
+        createBtn.onclick = async () => {
+            const name = document.getElementById('tokenName').value.trim();
+            const symbol = document.getElementById('tokenSymbol').value.trim();
+            const supplyStr = supplyInput.value.trim();
+            const decimals = parseInt(decimalsSelect.value);
+            let to = document.getElementById('toAddress').value.trim();
             
-            if (!ethers.isAddress(to)) {
-                showStatus('Địa chỉ nhận không hợp lệ', true);
+            if (!name || !symbol) {
+                showStatus('Nhập đủ Name và Symbol', 'error');
                 return;
             }
-            if (!amount) {
-                showStatus('Nhập số lượng mint', true);
+            if (!supplyStr || parseFloat(supplyStr) <= 0) {
+                showStatus('Initial Supply phải > 0', 'error');
+                return;
+            }
+            if (!to) {
+                to = await signer.getAddress();
+            }
+            if (!ethers.isAddress(to)) {
+                showStatus('Địa chỉ nhận không hợp lệ', 'error');
                 return;
             }
 
             try {
-                mintBtn.disabled = true;
-                mintBtn.innerText = 'Đang gửi giao dịch...';
+                createBtn.disabled = true;
+                createBtn.innerText = 'Đang tạo token...';
                 
-                const tx = await contract.mint(to, amount);
-                showStatus(`Đã gửi tx: ${tx.hash}. Chờ confirm...`);
+                const supplyWei = ethers.parseUnits(supplyStr, decimals);
+                const tx = await contract.createAssetToken(name, symbol, supplyWei, to);
                 
-                await tx.wait();
-                showStatus(`Mint thành công! TxHash: ${tx.hash}`);
+                showStatus(`Đã gửi tx: ${tx.hash}. Chờ confirm...`, 'success');
+                resultDiv.style.display = 'none';
+                
+                const receipt = await tx.wait();
+                
+                // Tìm địa chỉ token mới từ event
+                let tokenAddress = 'Check tx để xem';
+                for (const log of receipt.logs) {
+                    try {
+                        const parsed = contract.interface.parseLog(log);
+                        if (parsed.name === 'AssetTokenCreated') {
+                            tokenAddress = parsed.args.token;
+                            break;
+                        }
+                    } catch(e) {}
+                }
+                
+                showStatus(`Tạo token thành công!`, 'success');
+                resultDiv.innerHTML = `
+                    <strong>Token mới:</strong> ${tokenAddress}<br>
+                    <strong>Name:</strong> ${name}<br>
+                    <strong>Symbol:</strong> ${symbol}<br>
+                    <strong>Supply:</strong> ${parseFloat(supplyStr).toLocaleString()}<br>
+                    <strong>TxHash:</strong> ${tx.hash}<br><br>
+                    <a href="https://bscscan.com/token/${tokenAddress}" target="_blank" style="color:#f0b90b;">Xem trên BscScan →</a>
+                `;
+                resultDiv.style.display = 'block';
+                
             } catch (err) {
-                showStatus('Lỗi: ' + (err.reason || err.message), true);
+                showStatus('Lỗi: ' + (err.reason || err.message), 'error');
             } finally {
-                mintBtn.disabled = false;
-                mintBtn.innerText = 'Mint Token';
+                createBtn.disabled = false;
+                createBtn.innerText = 'Tạo Asset Token';
             }
         };
 
-        function showStatus(msg, isError = false) {
+        function showStatus(msg, type = 'success') {
             statusDiv.innerText = msg;
-            statusDiv.className = 'status ' + (isError ? 'error' : 'success');
+            statusDiv.className = 'status ' + type;
         }
     </script>
 </body>
