@@ -1,8 +1,8 @@
-"<!DOCTYPE html>
-<html lang=""vi"">
+<!DOCTYPE html>
+<html lang="vi">
 <head>
-    <meta charset=""UTF-8"">
-    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mint Token BSC</title>
     <style>
         body {
@@ -74,43 +74,43 @@
     </style>
 </head>
 <body>
-    <div class=""card"">
+    <div class="card">
         <h1>Mint Token BSC</h1>
-        <div class=""info"">
+        <div class="info">
             <strong>Contract:</strong> 0x79404d7a565f6f7f4e5174dd3964359f7e37bfa2<br>
             <strong>Method:</strong> mint (0x40c10f19)
         </div>
 
-        <div class=""row"">
-            <button id=""connectBtn"">Kết nối ví MetaMask</button>
-            <div id=""wallet"" class=""info"" style=""display:none; margin-top:12px;""></div>
+        <div class="row">
+            <button id="connectBtn">Kết nối ví MetaMask</button>
+            <div id="wallet" class="info" style="display:none; margin-top:12px;"></div>
         </div>
 
-        <div id=""mintForm"" style=""display:none;"">
-            <div class=""row"">
+        <div id="mintForm" style="display:none;">
+            <div class="row">
                 <label>Địa chỉ nhận token (address)</label>
-                <input type=""text"" id=""toAddress"" placeholder=""0x..."">
+                <input type="text" id="toAddress" placeholder="0x...">
             </div>
-            <div class=""row"">
+            <div class="row">
                 <label>Số lượng mint (uint256)</label>
-                <input type=""text"" id=""amount"" placeholder=""1000000000000000000"">
-                <small style=""color:#666"">VD: 1 token = 1000000000000000000 nếu decimals = 18</small>
+                <input type="text" id="amount" placeholder="1000000000000000000">
+                <small style="color:#666">VD: 1 token = 1000000000000000000 nếu decimals = 18</small>
             </div>
-            <button id=""mintBtn"">Mint Token</button>
+            <button id="mintBtn">Mint Token</button>
         </div>
 
-        <div id=""status"" class=""status""></div>
+        <div id="status" class="status"></div>
     </div>
 
-    <script src=""https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js""></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
     <script>
-        const CONTRACT_ADDRESS = ""0x79404d7a565f6f7f4e5174dd3964359f7e37bfa2"";
-        const BSC_CHAIN_ID = ""0x38""; // 56
+        const CONTRACT_ADDRESS = "0x79404d7a565f6f7f4e5174dd3964359f7e37bfa2";
+        const BSC_CHAIN_ID = "0x38"; // 56
         
         // ABI chỉ cần hàm mint. Tham số thực tế bạn check lại trên bscscan tab Write Contract
         // Thường mint(address to, uint256 amount) nhưng có contract khác
         const ABI = [
-            ""function mint(address to, uint256 amount) public""
+            "function mint(address to, uint256 amount) public"
         ];
 
         let provider, signer, contract;
@@ -128,7 +128,7 @@
             }
             try {
                 provider = new ethers.BrowserProvider(window.ethereum);
-                await provider.send(""eth_requestAccounts"", []);
+                await provider.send("eth_requestAccounts", []);
                 
                 // Check mạng BSC
                 const network = await provider.getNetwork();
@@ -188,4 +188,4 @@
         }
     </script>
 </body>
-</html>"
+</html>
