@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rescue ERC20 Tool - 0x8cd4426d</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.0/dist/ethers.umd.min.js"></script>
+    <style>
+        body { font-family: system-ui; max-width: 640px; margin: 40px auto; padding: 20px; background: #0a0a0a; color: #eee; }
+        .card { background: #171717; border: 1px solid #2a2a2a; border-radius: 16px; padding: 24px; }
+        h1 { margin: 0; font-size: 22px; }
+        .sub { color: #888; font-size: 13px; margin: 6px 0 18px 0; font-family: monospace; word-break: break-all; }
+        .alert { background: #451a03; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px; font-size: 13px; margin-bottom: 16px; }
+        label { font-size: 13px; color: #aaa; margin-top: 14px; display: block; }
+        input { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; color: #fff; font-family: monospace; margin-top: 6px; box-sizing: border-box; }
+        .row { display: flex; gap: 10px; }
+        .row input { flex: 1; }
+        .row button { width: 80px; background: #2a2a2a; }
+        button { width: 100%; padding: 14px; background: #8b5cf6; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 14px; }
+        button:disabled { background: #333; cursor: not-allowed; }
+        button.danger { background: #dc2626; }
+        button.danger:hover { background: #b91c1c; }
+        #status { margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 13px; display: none; word-break: break-all; }
+        .ok { background: #064e3b; border: 1px solid #10b981; display: block !important; }
+        .err { background: #450a0a; border: 1px solid #dc2626; display: block !important; }
+        .info { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid #222; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Rescue ERC20 Tool</h1>
+    <div class="sub">Contract: 0xD4f0D1c37407dc7f878F3FB42D3558F10e366aB5<br>Selector: 0x8cd4426d</div>
+    
+    <div class="alert">
+        ⚠️ Hàm <b>rescueERC20</b> chỉ dành cho Owner để rút token bị kẹt. 
+        Nếu ví bạn không phải owner, transaction sẽ fail và mất gas. Đừng dùng để rút token của người khác.
+    </div>
+
+    <div class="info"><span>Owner contract</span><span id="ownerAddr">...</span></div>
+    <div class="info"><span>Ví của bạn</span><span id="myAddr">Chưa kết nối</span></div>
+    <div class="info"><span>Balance token trong contract</span><span id="contractBal">-</span></div>
+
+    <button id="connectBtn">1. Kết nối MetaMask (Polygon)</button>
+
+    <div id="form" style="display:none">
+        <label>Token address cần cứu (ERC20)</label>
+        <input id="tokenAddr" placeholder="0x... ví dụ: 0xc2132D05D31c914a87C6611C10748AEb04B58e8F (USDT)">
+
+        <label>Địa chỉ nhận (to)</label>
+        <div class="row">
+            <input id="toAddr" placeholder="0x... địa chỉ ví nhận">
+            <button id="meBtn">Tôi</button>
+        </div>
+
+        <label>Số lượng (amount)</label>
+        <div class="row">
+            <input id="amount" placeholder="0.0">
+            <button id="maxBtn">MAX</button>
+        </div>
+
+        <button id="rescueBtn" class="danger">2. Gọi rescueERC20</button>
+    </div>
+
+    <div id="status"></div>
+</div>
+
+<script>
+const CONTRACT_ADDR = "0xD4f0D1c37407dc7f878F3FB42D3558F10e366aB5";
+
+// Thử 2 ABI phổ biến nhất cho rescueERC20
+const ABI_RESCUE = [
+    "function rescueERC20(address token, address to, uint256 amount) external",
+    "function owner() view returns (address)",
+    "function transferOwnership(address) external"
+];
+const ABI_RESCUE_SIMPLE = [
+    "function rescueERC20(address token) external",
+    "function owner() view returns (address)"
+];
+const ERC20_ABI = [
+    "function balanceOf(address) view returns (uint256)",
+    "function decimals() view returns (uint8)",
+    "function symbol() view returns (string)"
+];
+
+let provider, signer, myAddress, contract;
+
+function setStatus(msg, type){
+    const el = document.getElementById('status');
+    el.innerHTML = msg;
+    el.className = type;
+    el.style.display = 'block';
+}
+
+document.getElementById('connectBtn').onclick = async () => {
+    if(!window.ethereum) return setStatus('Chưa cài MetaMask', 'err');
+    provider = new ethers.BrowserProvider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const net = await provider.getNetwork();
+    if(net.chainId !== 137n){
+        await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x89' }] });
+    }
+    signer = await provider.getSigner();
+    myAddress = await signer.getAddress();
+    document.getElementById('myAddr').textContent = myAddress.slice(0,6)+'...'+myAddress.slice(-4);
+    
+    contract = new ethers.Contract(CONTRACT_ADDR, ABI_RESCUE, provider);
+    try {
+        const owner = await contract.owner();
+        document.getElementById('ownerAddr').textContent = owner.slice(0,6)+'...'+owner.slice(-4);
+        if(owner.toLowerCase() !== myAddress.toLowerCase()){
+            setStatus('⚠️ Bạn KHÔNG phải owner ('+owner+'). Gọi hàm sẽ bị revert.', 'err');
+        } else {
+            setStatus('✅ Bạn là owner, có quyền gọi rescueERC20', 'ok');
+        }
+    } catch(e){
+        document.getElementById('ownerAddr').textContent = 'Không có hàm owner()';
+    }
+    
+    document.getElementById('form').style.display = 'block';
+    document.getElementById('connectBtn').textContent = 'Đã kết nối';
+};
+
+document.getElementById('meBtn').onclick = () => {
+    document.getElementById('toAddr').value = myAddress;
+};
+
+document.getElementById('maxBtn').onclick = async () => {
+    const token = document.getElementById('tokenAddr').value.trim();
+    if(!ethers.isAddress(token)) return setStatus('Token address không hợp lệ', 'err');
+    try {
+        const erc20 = new ethers.Contract(token, ERC20_ABI, provider);
+        const bal = await erc20.balanceOf(CONTRACT_ADDR);
+        const dec = await erc20.decimals();
+        const sym = await erc20.symbol().catch(()=> '');
+        document.getElementById('contractBal').textContent = ethers.formatUnits(bal, dec) + ' ' + sym;
+        document.getElementById('amount').value = ethers.formatUnits(bal, dec);
+        document.getElementById('amount').dataset.raw = bal.toString();
+        document.getElementById('amount').dataset.decimals = dec;
+    } catch(e){
+        setStatus('Lỗi đọc balance: ' + e.message, 'err');
+    }
+};
+
+document.getElementById('rescueBtn').onclick = async () => {
+    const token = document.getElementById('tokenAddr').value.trim();
+    const to = document.getElementById('toAddr').value.trim();
+    const amountInput = document.getElementById('amount');
+
+    if(!ethers.isAddress(token) || !ethers.isAddress(to)) return setStatus('Địa chỉ token/to không hợp lệ', 'err');
+    
+    try {
+        document.getElementById('rescueBtn').disabled = true;
+        document.getElementById('rescueBtn').textContent = 'Đang gửi...';
+        
+        const signerContract = new ethers.Contract(CONTRACT_ADDR, ABI_RESCUE, signer);
+        let amountRaw;
+        if(amountInput.dataset.raw){
+            amountRaw = amountInput.dataset.raw;
+        } else {
+            const erc20 = new ethers.Contract(token, ERC20_ABI, provider);
+            const dec = await erc20.decimals();
+            amountRaw = ethers.parseUnits(amountInput.value, dec);
+        }
+
+        setStatus(`Đang gọi rescueERC20(${token}, ${to}, ${amountRaw})...`, 'ok');
+        const tx = await signerContract.rescueERC20(token, to, amountRaw);
+        setStatus(`Tx đã gửi: <a style="color:#fff" target="_blank" href="https://polygonscan.com/tx/${tx.hash}">${tx.hash}</a><br>Đang chờ confirm...`, 'ok');
+        await tx.wait();
+        setStatus(`✅ Thành công! <a style="color:#fff" target="_blank" href="https://polygonscan.com/tx/${tx.hash}">Xem Polygonscan</a>`, 'ok');
+    } catch(e){
+        // Fallback thử ABI rescueERC20(address) nếu ABI 3 tham số fail
+        try {
+            if(e.message.includes('no matching function') || e.message.includes('data')){
+                const simpleContract = new ethers.Contract(CONTRACT_ADDR, ABI_RESCUE_SIMPLE, signer);
+                const tx2 = await simpleContract["rescueERC20(address)"](token);
+                setStatus(`Tx gửi (dạng đơn giản): <a style="color:#fff" target="_blank" href="https://polygonscan.com/tx/${tx2.hash}">${tx2.hash}</a>`, 'ok');
+                await tx2.wait();
+                setStatus(`✅ Thành công!`, 'ok');
+                return;
+            }
+        } catch(e2){}
+        setStatus('Lỗi: ' + (e.reason || e.message), 'err');
+    } finally {
+        document.getElementById('rescueBtn').disabled = false;
+        document.getElementById('rescueBtn').textContent = 'Gọi rescueERC20';
+    }
+};
+</script>
+</div>
+</body>
+</html>
