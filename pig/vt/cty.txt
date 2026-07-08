@@ -1,0 +1,121 @@
+Cơ cấu vị trí trong một công ty Trách nhiệm hữu hạn (TNHH) được phân chia rõ ràng theo các cấp quản lý và phòng ban chuyên môn. Cách thiết lập sơ đồ nhân sự cụ thể sẽ phụ thuộc vào việc doanh nghiệp đó là công ty TNHH 1 thành viên hay công ty TNHH từ 2 thành viên trở lên. [1, 2, 3] 
+Dưới đây là sơ đồ các vị trí từ cấp cao nhất đến cấp nhân viên thực thi trong mô hình công ty TNHH:
+## 👑 Cấp lãnh đạo tối cao (Quản trị & Sở hữu)
+
+* 
+* Chủ sở hữu công ty: Cá nhân hoặc tổ chức nắm giữ 100% vốn điều lệ (đối với mô hình [Công ty TNHH 1 thành viên](https://ketoananpha.vn/so-do-co-cau-to-chuc-cua-cong-ty-tnhh-1-thanh-vien.html)). [1, 4] 
+* Hội đồng thành viên (HĐTV): Cơ quan quyết định cao nhất gồm tất cả các thành viên góp vốn (đối với mô hình [Công ty TNHH 2 thành viên trở lên](https://sme.misa.vn/326233/so-do-to-chuc-cong-ty-tnhh-2-thanh-vien/)).
+* Chủ tịch Hội đồng thành viên / Chủ tịch công ty: Người đứng đầu HĐTV hoặc do chủ sở hữu bổ nhiệm để quản lý, giám sát chung hoạt động chiến lược. [1, 5] 
+* Ban kiểm soát / Kiểm soát viên: Vị trí độc lập có nhiệm vụ giám sát tính hợp pháp và trung thực trong quản lý điều hành của công ty.
+* 
+
+## 💼 Cấp điều hành chiến lược (Ban giám đốc)
+
+* 
+* Giám đốc / Tổng giám đốc (CEO): Người đại diện pháp luật điều hành trực tiếp mọi hoạt động kinh doanh hằng ngày của doanh nghiệp.
+* Phó Giám đốc / Phó Tổng giám đốc: Người trợ lịnh cho Giám đốc, chịu trách nhiệm phụ trách một mảng lớn cố định (kinh doanh, vận hành, sản xuất).
+* Giám đốc chức năng (C-Level): Các vị trí quản lý cấp cao chuyên sâu như [Giám đốc tài chính (CFO)](https://leanhhr.com/cac-vi-tri-trong-cong-ty.html), Giám đốc marketing (CMO), hoặc Giám đốc công nghệ (CTO). [1, 6, 7, 8] 
+* 
+
+## 👔 Cấp quản lý trung gian (Phòng ban)
+
+* 
+* Trưởng phòng / Trưởng bộ phận (Manager / Head): Người trực tiếp chịu trách nhiệm quản lý nhân sự, chỉ tiêu và tiến độ công việc của một phòng ban cụ thể.
+* Phó trưởng phòng: Hỗ trợ trưởng phòng điều hành công việc nội bộ bộ phận.
+* Trưởng nhóm (Team Leader): Quản lý một nhóm nhỏ gồm các nhân viên có cùng nghiệp vụ chuyên môn sâu. [7, 9] 
+* 
+
+## 👥 Cấp thực thi chuyên môn (Nhân viên)
+Hệ thống nhân viên được chia theo các khối chức năng cơ bản của công ty: [2] 
+
+* 
+* Khối Hành chính - Nhân sự: Nhân viên Tuyển dụng, Nhân viên C&B (Lương & Phúc lợi), Nhân viên Hành chính lễ tân.
+* Khối Tài chính - Kế toán: Kế toán trưởng, Kế toán tổng hợp, Kế toán nội bộ, Thủ quỹ.
+* Khối Kinh doanh (Sales): Nhân viên Kinh doanh, Nhân viên Chăm sóc khách hàng (CSKH), Nhân viên Phát triển thị trường.
+* Khối Tiếp thị (Marketing): Nhân viên Content, Nhân viên Chạy quảng cáo (Digital Marketing), Nhân viên Thiết kế đồ họa (Designer).
+* Khối Kỹ thuật - Sản xuất / Vận hành (Ops): Kỹ sư, Nhân viên kỹ thuật, Nhân viên kho bãi, Công nhân (nếu là công ty sản xuất). [10] 
+* 
+
+------------------------------
+Nếu bạn đang muốn thiết lập bộ máy cho doanh nghiệp của mình, hãy chia sẻ thêm:
+
+* 
+* Công ty bạn thuộc mô hình 1 thành viên hay nhiều thành viên?
+* Doanh nghiệp đang hoạt động trong ngành nghề/lĩnh vực nào?
+* Quy mô nhân sự dự kiến là khoảng bao nhiêu người?
+* 
+
+Tôi sẽ tư vấn sơ đồ tổ chức tối ưu và tinh gọn nhất phù hợp với nhu cầu của bạn.
+
+[1] [https://ketoananpha.vn](https://ketoananpha.vn/so-do-co-cau-to-chuc-cua-cong-ty-tnhh-1-thanh-vien.html)
+[2] [https://glints.com](https://glints.com/vn/blog/cac-bo-phan-trong-cong-ty/)
+[3] [https://www.careerlink.vn](https://www.careerlink.vn/cam-nang-viec-lam/tu-van-nghe-nghiep/cac-chuc-vu-trong-cong-ty)
+[4] [https://aztax.com.vn](https://aztax.com.vn/cong-ty-tnhh-1-thanh-vien-la-gi/)
+[5] [https://luatduyhung.com](https://luatduyhung.com/co-cau-to-chuc-cong-ty-tnhh-01-thanh-vien/)
+[6] [https://vieclam24h.vn](https://vieclam24h.vn/nghe-nghiep/la-ban-su-nghiep/cac-chuc-vu-cong-ty)
+[7] [https://vi.sblaw.vn](https://vi.sblaw.vn/cac-chuc-danh-trong-cong-ty-tnhh-1-thanh-vien/)
+[8] [https://leanhhr.com](https://leanhhr.com/cac-vi-tri-trong-cong-ty.html)
+[9] [https://www.reddit.com](https://www.reddit.com/r/BusinessIntelligence/comments/yev0y2/job_title_question_what_is_the_difference_between/?tl=vi)
+[10] [https://www.topcv.vn](https://www.topcv.vn/cac-chuc-vu-trong-cong-ty)
+
+
+
+
+
+
+
+CTY CỔ PHẦN
+
+Đại hội đồng cổ đông là cơ quan có quyền lực cao nhất trong công ty cổ phần (CTCP), bao gồm tất cả các cá nhân và tổ chức sở hữu ít nhất một cổ phần của doanh nghiệp.
+So với công ty TNHH, cơ cấu vị trí trong công ty cổ phần phức tạp hơn, có sự tách biệt rõ rệt giữa quyền sở hữu (Cổ đông) và quyền điều hành (Ban giám đốc) nhằm đáp ứng quy mô vốn lớn.
+Dưới đây là sơ đồ các vị trí phân theo cấp bậc trong công ty cổ phần:
+## 👑 Cấp quản trị và sở hữu (Cơ quan quyết định)
+
+* 
+* Đại hội đồng cổ đông (ĐHĐCĐ): Tập hợp toàn bộ cổ đông, có quyền bầu/miễn nhiệm Hội đồng quản trị và quyết định các chiến lược lớn.
+* Hội đồng quản trị (HĐQT): Cơ quan quản lý công ty do ĐHĐCĐ bầu ra, có toàn quyền nhân danh công ty để quyết định mọi vấn đề trừ thuộc thẩm quyền của ĐHĐCĐ.
+* Chủ tịch Hội đồng quản trị: Người đứng đầu HĐQT, có nhiệm vụ lập chương trình, kế hoạch hoạt động và chủ trì các cuộc họp quản trị.
+* Ban kiểm soát (BKS) / Ủy ban kiểm toán: Cơ quan độc lập do ĐHĐCĐ bầu ra nhằm giám sát HĐQT và Ban giám đốc để bảo vệ lợi ích cho cổ đông.
+* 
+
+## 💼 Cấp điều hành chiến lược (Ban điều hành)
+
+* 
+* Giám đốc / Tổng giám đốc (CEO): Người điều hành công việc kinh doanh hằng ngày, chịu sự giám sát của HĐQT và là người đại diện pháp luật (hoặc chung với Chủ tịch HĐQT).
+* Phó Giám đốc / Phó Tổng giám đốc: Người trợ lý cho CEO, chịu trách nhiệm quản lý một khối nghiệp vụ lớn (như Khối Vận hành, Khối Sản xuất).
+* Giám đốc chức năng (C-Level): Các chuyên gia điều hành chuyên sâu gồm Giám đốc Tài chính (CFO), Giám đốc Nhân sự (CHRO), Giám đốc Công nghệ (CTO), Giám đốc Marketing (CMO).
+* Thư ký công ty / Người phụ trách quản trị: Vị trí hỗ trợ HĐQT thực hiện các nghĩa vụ pháp lý, tổ chức họp và công bố thông tin (bắt buộc đối với công ty đại chúng/niêm yết).
+* 
+
+## 👔 Cấp quản lý trung gian (Phòng ban)
+
+* 
+* Giám đốc khối / Giám đốc vùng (Director): Quản lý một cụm gồm nhiều phòng ban hoặc nhiều chi nhánh tỉnh thành.
+* Trưởng phòng / Trưởng bộ phận (Manager / Head): Điều hành trực tiếp nhân sự, ngân sách và chỉ tiêu (KPI) của một phòng ban chức năng.
+* Phó trưởng phòng: Hỗ trợ trưởng phòng quản lý công việc và thay mặt khi trưởng phòng vắng mặt.
+* Trưởng nhóm (Team Leader) / Giám sát (Supervisor): Quản lý trực tiếp tiến độ công việc hằng ngày của một nhóm nhân viên chuyên môn.
+* 
+
+## 👥 Cấp thực thi chuyên môn (Nhân viên)
+Hệ thống nhân viên trong công ty cổ phần thường rất chuyên môn hóa và được chia nhỏ theo các phòng ban chuyên biệt:
+
+* 
+* Khối Hành chính - Nhân sự: Nhân viên Tuyển dụng, Nhân viên Đào tạo, Nhân viên C&B, Nhân viên Quan hệ lao động.
+* Khối Tài chính - Kế toán: Kế toán trưởng, Kế toán tổng hợp, Kế toán thuế, Chuyên viên quản trị rủi ro, Chuyên viên phân tích tài chính.
+* Khối Kinh doanh & Đối ngoại: Nhân viên Kinh doanh (Sales), Chuyên viên Quan hệ cổ đông (IR - vị trí đặc thù của CTCP), Nhân viên Chăm sóc khách hàng.
+* Khối Tiếp thị & Truyền thông: Nhân viên Marketing, Chuyên viên Quan hệ công chúng (PR), Chuyên viên Sáng tạo nội dung.
+* Khối Vận hành & R&D: Kỹ sư hệ thống, Nhân viên Nghiên cứu & Phát triển sản phẩm (R&D), Chuyên viên Kiểm định chất lượng (QA/QC).
+* 
+
+------------------------------
+Bất kể mô hình nào, việc tối ưu hóa sơ đồ tổ chức luôn phụ thuộc vào giai đoạn phát triển của doanh nghiệp. Để nhận được tư vấn chi tiết hơn về cấu trúc phòng ban, bạn có thể cho biết thêm:
+
+* 
+* Công ty cổ phần của bạn là mô hình nội bộ (dưới 11 cổ đông) hay hướng tới công ty đại chúng đại chúng/gọi vốn lớn?
+* Lĩnh vực hoạt động chính là gì (ví dụ: Thương mại, Công nghệ, hay Sản xuất)?
+* Bạn có cần biểu mẫu cụ thể về quyền hạn giữa Chủ tịch HĐQT và Tổng giám đốc không?
+* 
+
+
+
+
