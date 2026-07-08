@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tuyển Dụng — CTCP TechVina Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #0B1F3A;
+    --navy-80: #1A3458;
+    --navy-60: #2C4D72;
+    --gold:    #C9943A;
+    --gold-lt: #E8B96A;
+    --ivory:   #FAFAF8;
+    --slate:   #E8EDF3;
+    --slate-2: #C5CDD8;
+    --body:    #3D4F63;
+    --muted:   #6B7E93;
+    --white:   #FFFFFF;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--ivory);
+    color: var(--body);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px;
+    height: 68px;
+    background: rgba(11,31,58,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,148,58,0.25);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem; font-weight: 700;
+    color: var(--white); letter-spacing: 0.02em;
+  }
+
+  .nav-logo .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold); flex-shrink: 0;
+  }
+
+  .nav-links {
+    display: flex; gap: 32px; list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.65);
+    text-decoration: none; font-size: 0.82rem;
+    font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--gold-lt); }
+
+  .nav-cta {
+    background: var(--gold);
+    color: var(--navy) !important;
+    padding: 7px 18px; border-radius: 4px;
+    font-weight: 600 !important;
+  }
+
+  .nav-cta:hover { background: var(--gold-lt) !important; color: var(--navy) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    background: var(--navy);
+    display: flex; align-items: center;
+    overflow: hidden;
+    padding: 120px 48px 80px;
+  }
+
+  /* diagonal gold stripe — signature element */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -120px;
+    width: 520px; height: 800px;
+    background: linear-gradient(160deg, rgba(201,148,58,0.18) 0%, rgba(201,148,58,0.04) 100%);
+    transform: rotate(-8deg);
+    border-left: 2px solid rgba(201,148,58,0.35);
+    border-radius: 2px;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 40px; right: 60px;
+    width: 320px; height: 500px;
+    background: linear-gradient(160deg, rgba(201,148,58,0.08) 0%, transparent 100%);
+    transform: rotate(-8deg);
+    border-left: 1px solid rgba(201,148,58,0.18);
+  }
+
+  .hero-inner {
+    position: relative; z-index: 2;
+    max-width: 1200px; margin: 0 auto; width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--gold); font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hero-eyebrow::before {
+    content: ''; display: block;
+    width: 24px; height: 1px; background: var(--gold);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 900; line-height: 1.08;
+    color: var(--white); letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 em {
+    font-style: italic; color: var(--gold-lt);
+  }
+
+  .hero-sub {
+    color: rgba(255,255,255,0.58);
+    font-size: 1.02rem; line-height: 1.75;
+    max-width: 480px; margin-bottom: 36px;
+  }
+
+  .hero-actions {
+    display: flex; gap: 14px; flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 13px 28px; border-radius: 4px;
+    font-weight: 700; font-size: 0.88rem;
+    letter-spacing: 0.04em; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: var(--gold-lt); transform: translateY(-1px); }
+
+  .btn-ghost {
+    border: 1px solid rgba(255,255,255,0.28);
+    color: rgba(255,255,255,0.75);
+    padding: 13px 28px; border-radius: 4px;
+    font-weight: 500; font-size: 0.88rem;
+    letter-spacing: 0.04em; text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* Hero stats */
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.08);
+  }
+
+  .stat {
+    padding: 28px 20px; text-align: center;
+    background: rgba(11,31,58,0.5);
+    border-right: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .stat:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem; font-weight: 900;
+    color: var(--gold); line-height: 1;
+    display: block; margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 0.72rem; color: rgba(255,255,255,0.45);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* ── COMPANY TYPE BADGE ── */
+  .company-badge {
+    margin-top: 32px;
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid rgba(201,148,58,0.3);
+    border-radius: 20px; padding: 6px 14px;
+    font-size: 0.72rem; color: var(--gold);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+
+  /* ── FILTERS SECTION ── */
+  .filters-section {
+    position: sticky; top: 68px; z-index: 50;
+    background: var(--white);
+    border-bottom: 1px solid var(--slate);
+    padding: 0 48px;
+    box-shadow: 0 2px 12px rgba(11,31,58,0.06);
+  }
+
+  .filters-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .filters-inner::-webkit-scrollbar { display: none; }
+
+  .filter-tab {
+    padding: 18px 22px;
+    border: none; background: none; cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem; font-weight: 500;
+    color: var(--muted); letter-spacing: 0.04em;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .filter-tab:hover { color: var(--navy); }
+
+  .filter-tab.active {
+    color: var(--navy); font-weight: 700;
+    border-bottom-color: var(--gold);
+  }
+
+  .filter-count {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--slate); color: var(--muted);
+    font-size: 0.65rem; font-weight: 700;
+    margin-left: 5px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .filter-tab.active .filter-count {
+    background: var(--gold); color: var(--white);
+  }
+
+  /* ── JOBS SECTION ── */
+  .jobs-section {
+    padding: 64px 48px 100px;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 36px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--navy);
+  }
+
+  .showing-label {
+    font-size: 0.8rem; color: var(--muted);
+  }
+
+  /* ── JOB CARDS ── */
+  .jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  .job-card {
+    background: var(--white);
+    border: 1px solid var(--slate);
+    border-radius: 10px;
+    padding: 28px 28px 24px;
+    display: flex; flex-direction: column;
+    cursor: pointer;
+    transition: box-shadow 0.25s, transform 0.2s, border-color 0.2s;
+    position: relative; overflow: hidden;
+  }
+
+  .job-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--gold);
+    transform: scaleY(0);
+    transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+    transform-origin: bottom;
+  }
+
+  .job-card:hover {
+    box-shadow: 0 8px 32px rgba(11,31,58,0.1);
+    transform: translateY(-2px);
+    border-color: var(--slate-2);
+  }
+
+  .job-card:hover::before { transform: scaleY(1); }
+
+  .job-card.hidden { display: none; }
+
+  .card-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 16px;
+  }
+
+  .dept-badge {
+    font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 3px;
+  }
+
+  .dept-tech    { background: #EEF2FF; color: #4F46E5; }
+  .dept-biz     { background: #FFF7ED; color: #C05F0A; }
+  .dept-hr      { background: #F0FDF4; color: #16A34A; }
+  .dept-mkt     { background: #FFF1F2; color: #BE123C; }
+  .dept-finance { background: #F0F9FF; color: #0369A1; }
+  .dept-legal   { background: #FAF5FF; color: #7E22CE; }
+  .dept-ops     { background: #FEFCE8; color: #92400E; }
+  .dept-design  { background: #FDF4FF; color: #A21CAF; }
+
+  .level-badge {
+    font-size: 0.68rem; color: var(--muted);
+    font-weight: 500; letter-spacing: 0.04em;
+  }
+
+  .job-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.12rem; font-weight: 700;
+    color: var(--navy); line-height: 1.25;
+    margin-bottom: 8px;
+  }
+
+  .job-location {
+    font-size: 0.78rem; color: var(--muted);
+    display: flex; align-items: center; gap: 5px;
+    margin-bottom: 16px;
+  }
+
+  .job-location svg { flex-shrink: 0; }
+
+  .job-desc {
+    font-size: 0.82rem; color: var(--body);
+    line-height: 1.65; flex: 1;
+    margin-bottom: 20px;
+  }
+
+  .job-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 16px; border-top: 1px solid var(--slate);
+  }
+
+  .job-salary {
+    font-size: 0.8rem; font-weight: 700;
+    color: var(--navy);
+  }
+
+  .job-salary span {
+    font-size: 0.7rem; font-weight: 400; color: var(--muted); margin-left: 2px;
+  }
+
+  .job-type {
+    font-size: 0.68rem; color: var(--muted);
+    border: 1px solid var(--slate-2);
+    padding: 3px 8px; border-radius: 2px;
+    font-weight: 500; letter-spacing: 0.05em;
+  }
+
+  .apply-btn {
+    display: block; width: 100%;
+    margin-top: 14px; padding: 11px;
+    background: var(--navy);
+    color: var(--white); text-align: center;
+    font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.05em; text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.2s;
+    border: none; cursor: pointer; font-family: inherit;
+  }
+
+  .apply-btn:hover { background: var(--navy-80); }
+
+  /* deadline warning */
+  .deadline {
+    font-size: 0.7rem; color: #B45309;
+    display: flex; align-items: center; gap: 4px;
+    margin-top: 10px;
+  }
+
+  .deadline.hot { color: #DC2626; }
+
+  /* ── BENEFITS STRIP ── */
+  .benefits-strip {
+    background: var(--navy);
+    padding: 60px 48px;
+  }
+
+  .benefits-inner {
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .benefits-label {
+    font-size: 0.72rem; font-weight: 600;
+    color: var(--gold); letter-spacing: 0.14em;
+    text-transform: uppercase; margin-bottom: 36px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .benefits-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+
+  .benefits-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+  }
+
+  .benefit-item {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  .benefit-icon {
+    font-size: 1.6rem; line-height: 1;
+  }
+
+  .benefit-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700; color: var(--white);
+  }
+
+  .benefit-text {
+    font-size: 0.78rem; color: rgba(255,255,255,0.5); line-height: 1.6;
+  }
+
+  /* ── PROCESS ── */
+  .process-section {
+    padding: 80px 48px;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-size: 0.72rem; font-weight: 600;
+    color: var(--gold); letter-spacing: 0.14em;
+    text-transform: uppercase; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .section-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--gold); }
+
+  .section-h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: var(--navy);
+    margin-bottom: 48px;
+  }
+
+  .process-steps {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    position: relative;
+  }
+
+  .process-steps::before {
+    content: '';
+    position: absolute; top: 20px; left: 10%; right: 10%;
+    height: 1px; background: var(--slate-2); z-index: 0;
+  }
+
+  .process-step {
+    text-align: center; position: relative; z-index: 1; padding: 0 16px;
+  }
+
+  .step-circle {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--white); border: 2px solid var(--slate-2);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px; font-size: 0.75rem; font-weight: 700;
+    color: var(--muted); transition: background 0.2s, border-color 0.2s;
+  }
+
+  .process-step.done .step-circle {
+    background: var(--gold); border-color: var(--gold); color: var(--white);
+  }
+
+  .step-title {
+    font-size: 0.85rem; font-weight: 700; color: var(--navy); margin-bottom: 6px;
+  }
+
+  .step-desc {
+    font-size: 0.74rem; color: var(--muted); line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    padding: 40px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700; color: var(--white);
+  }
+
+  .footer-links {
+    display: flex; gap: 24px; list-style: none;
+  }
+
+  .footer-links a {
+    color: rgba(255,255,255,0.4); font-size: 0.75rem;
+    text-decoration: none;
+  }
+
+  .footer-links a:hover { color: var(--gold-lt); }
+
+  .footer-note {
+    font-size: 0.72rem; color: rgba(255,255,255,0.25);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+
+    .hero { padding: 100px 20px 60px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero-stats { max-width: 400px; }
+
+    .filters-section { padding: 0 20px; }
+    .jobs-section { padding: 40px 20px 60px; }
+    .benefits-strip { padding: 48px 20px; }
+    .process-section { padding: 48px 20px; }
+
+    .process-steps { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .process-steps::before { display: none; }
+
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 20px; }
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+  }
+
+  @media (max-width: 600px) {
+    .jobs-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2rem; }
+    .process-steps { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+  }
+
+  /* fade-in animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .job-card { animation: fadeUp 0.4s ease both; }
+  .job-card:nth-child(1) { animation-delay: 0.05s; }
+  .job-card:nth-child(2) { animation-delay: 0.10s; }
+  .job-card:nth-child(3) { animation-delay: 0.15s; }
+  .job-card:nth-child(4) { animation-delay: 0.20s; }
+  .job-card:nth-child(5) { animation-delay: 0.25s; }
+  .job-card:nth-child(6) { animation-delay: 0.30s; }
+  .job-card:nth-child(7) { animation-delay: 0.35s; }
+  .job-card:nth-child(8) { animation-delay: 0.40s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="dot"></div>
+    TechVina Solutions
+  </div>
+  <ul class="nav-links">
+    <li><a href="#">Về Chúng Tôi</a></li>
+    <li><a href="#">Sản Phẩm</a></li>
+    <li><a href="#">Văn Hóa</a></li>
+    <li><a href="#jobs" class="nav-cta">Xem Vị Trí</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Tuyển Dụng 2025</div>
+      <h1>
+        Gia nhập đội ngũ<br/>
+        <em>kiến tạo tương lai</em><br/>
+        công nghệ Việt
+      </h1>
+      <p class="hero-sub">
+        Chúng tôi đang tìm kiếm những con người xuất sắc, đam mê và sẵn sàng đột phá. Hãy trở thành một phần của hành trình xây dựng sản phẩm công nghệ cho thị trường Đông Nam Á.
+      </p>
+      <div class="hero-actions">
+        <a href="#jobs" class="btn-primary">Xem Vị Trí Tuyển Dụng</a>
+        <a href="#process" class="btn-ghost">Quy Trình Ứng Tuyển</a>
+      </div>
+      <div class="company-badge">
+        &#9670; Công ty Cổ phần TechVina Solutions — MST: 0108xxxxxx
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">8</span>
+          <span class="stat-label">Vị trí<br/>đang mở</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">5+</span>
+          <span class="stat-label">Năm<br/>hoạt động</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">120</span>
+          <span class="stat-label">Nhân viên<br/>toàn thời gian</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER TABS -->
+<div class="filters-section">
+  <div class="filters-inner">
+    <button class="filter-tab active" data-filter="all">
+      Tất cả <span class="filter-count">8</span>
+    </button>
+    <button class="filter-tab" data-filter="tech">
+      Kỹ thuật <span class="filter-count">3</span>
+    </button>
+    <button class="filter-tab" data-filter="biz">
+      Kinh doanh <span class="filter-count">1</span>
+    </button>
+    <button class="filter-tab" data-filter="mkt">
+      Marketing <span class="filter-count">1</span>
+    </button>
+    <button class="filter-tab" data-filter="hr">
+      Nhân sự <span class="filter-count">1</span>
+    </button>
+    <button class="filter-tab" data-filter="finance">
+      Tài chính <span class="filter-count">1</span>
+    </button>
+    <button class="filter-tab" data-filter="legal">
+      Pháp lý <span class="filter-count">1</span>
+    </button>
+  </div>
+</div>
+
+<!-- JOB LISTINGS -->
+<section class="jobs-section" id="jobs">
+  <div class="section-header">
+    <div class="section-title">Vị trí đang tuyển</div>
+    <div class="showing-label" id="showing-label">Hiển thị 8 vị trí</div>
+  </div>
+
+  <div class="jobs-grid" id="jobs-grid">
+
+    <!-- Card 1: Backend Dev -->
+    <div class="job-card" data-dept="tech">
+      <div class="card-top">
+        <span class="dept-badge dept-tech">Kỹ thuật</span>
+        <span class="level-badge">Senior</span>
+      </div>
+      <div class="job-title">Lập trình viên Backend (Java/Spring)</div>
+      <div class="job-location">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C5.24 0 3 2.24 3 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.75C7.03 6.75 6.25 5.97 6.25 5S7.03 3.25 8 3.25 9.75 4.03 9.75 5 8.97 6.75 8 6.75z"/></svg>
+        Hà Nội (Cầu Giấy) · Có thể hybrid
+      </div>
+      <p class="job-desc">
+        Thiết kế và xây dựng các dịch vụ microservices hiệu năng cao cho hệ thống xử lý hàng triệu giao dịch/ngày. Làm việc cùng đội ngũ kiến trúc sư cấp cao để triển khai giải pháp trên AWS.
+      </p>
+      <div class="job-footer">
+        <div class="job-salary">25 – 45 triệu <span>/ tháng</span></div>
+        <div class="job-type">Toàn thời gian</div>
+      </div>
+      <div class="deadline hot">⚠ Đóng hồ sơ: 25/07/2025</div>
+      <button class="apply-btn">Ứng tuyển ngay</button>
+    </div>
+
+    <!-- Card 2: Frontend Dev -->
+    <div class="job-card" data-dept="tech">
+      <div class="card-top">
+        <span class="dept-badge dept-tech">Kỹ thuật</span>
+        <span class="level-badge">Mid-Senior</span>
+      </div>
+      <div class="job-title">Lập trình viên Frontend (React/TypeScript)</div>
+      <div class="job-location">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C5.24 0 3 2.24 3 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.75C7.03 6.75 6.25 5.97 6.25 5S7.03 3.25 8 3.25 9.75 4.03 9.75 5 8.97 6.75 8 6.75z"/></svg>
+        TP. Hồ Chí Minh (Q.1) · Remote
+      </div>
+      <p class="job-desc">
+        Xây dựng giao diện người dùng cho nền tảng SaaS B2B của chúng tôi. Bạn sẽ làm việc chặt chẽ với đội thiết kế UX và backend để tạo ra trải nghiệm mượt mà, có khả năng mở rộng.
+      </p>
+      <div class="job-footer">
+        <div class="job-salary">20 – 38 triệu <span>/ tháng</span></div>
+        <div class="job-type">Toàn thời gian</div>
+      </div>
+      <div class="deadline">📅 Đóng hồ sơ: 15/08/2025</div>
+      <button class="apply-btn">Ứng tuyển ngay</button>
+    </div>
+
+    <!-- Card 3: DevOps -->
+    <div class="job-card" data-dept="tech">
+      <div class="card-top">
+        <span class="dept-badge dept-tech">Kỹ thuật</span>
+        <span class="level-badge">Senior</span>
+      </div>
+      <div class="job-title">Kỹ sư DevOps / Cloud (AWS)</div>
+      <div class="job-location">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C5.24 0 3 2.24 3 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.75C7.03 6.75 6.25 5.97 6.25 5S7.03 3.25 8 3.25 9.75 4.03 9.75 5 8.97 6.75 8 6.75z"/></svg>
+        Hà Nội / Remote toàn quốc
+      </div>
+      <p class="job-desc">
+        Quản lý và tối ưu hạ tầng AWS đa vùng, xây dựng CI/CD pipeline, đảm bảo SLA 99.9% uptime cho hệ thống sản xuất. Kỹ năng Kubernetes, Terraform, và Prometheus là lợi thế.
+      </p>
+      <div class="job-footer">
+        <div class="job-salary">28 – 50 triệu <span>/ tháng</span></div>
+        <div class="job-type">Toàn thời gian</div>
+      </div>
+      <div class="deadline">📅 Đóng hồ sơ: 30/08/2025</div>
+      <button class="apply-btn">Ứng tuyển ngay</button>
+    </div>
+
+    <!-- Card 4: Sales Director -->
+    <div class="job-card" data-dept="biz">
+      <div class="card-top">
+        <span class="dept-badge dept-biz">Kinh doanh</span>
+        <span class="level-badge">Director</span>
+      </div>
+      <div class="job-title">Giám đốc Kinh doanh Khu vực (B2B SaaS)</div>
+      <div class="job-location">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C5.24 0 3 2.24 3 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.75C7.03 6.75 6.25 5.97 6.25 5S7.03 3.25 8 3.25 9.75 4.03 9.75 5 8.97 6.75 8 6.75z"/></svg>
+        TP. Hồ Chí Minh (Q. Bình Thạnh)
+      </div>
+      <p class="job-desc">
+        Dẫn dắt đội ngũ bán hàng B2B tại miền Nam, xây dựng chiến lược thâm nhập thị trường doanh nghiệp vừa và lớn, thiết lập quan hệ đối tác chiến lược với các tập đoàn trong nước và FDI.
+      </p>
+      <div class="job-footer">
+        <div class="job-salary">40 – 70 triệu <span>+ hoa hồng</span></div>
+        <div class="job-type">Toàn thời gian</div>
+      </div>
+      <div class="deadline hot">⚠ Đóng hồ sơ: 20/07/2025</div>
+      <button class="apply-btn">Ứng tuyển ngay</button>
+    </div>
+
+    <!-- Card 5: Marketing -->
+    <div class="job-card" data-dept="mkt">
+      <div class="card-top">
+        <span class="dept-badge dept-mkt">Marketing</span>
+        <span class="level-badge">Manager</span>
+      </div>
+      <div class="job-title">Trưởng phòng Digital Marketing</div>
+      <div class="job-location">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C5.24 0 3 2.24 3 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.75C7.03 6.75 6.25 5.97 6.25 5S7.03 3.25 8 3.25 9.75 4.03 9.75 5 8.97 6.75 8 6.75z"/></svg>
+        Hà Nội (Đống Đa) · Hybrid 3 ngày/tuần
+      </div>
+      <p class="job-desc">
+        Lên kế hoạch và thực thi chiến lược marketing đa kênh (SEO, SEM, Social, Email), quản lý ngân sách 500 triệu/tháng, đo lường ROI và tối ưu conversion funnel cho sản phẩm SaaS.
+      </p>
+      <div class="job-footer">
+        <div class="job-salary">22 – 40 triệu <span>/ tháng</span></div>
+        <div class="job-type">Toàn thời gian</div>
+      </div>
+      <div class="deadline">📅 Đóng hồ sơ: 10/08/2025</div>
+      <button class="apply-btn">Ứng tuyển ngay</button>
+    </div>
+
+    <!-- Card 6: HR -->
+    <div class="job-card" data-dept="hr">
+      <div class="card-top">
+        <span class="dept-badge dept-hr">Nhân sự</span>
+        <span class="level-badge">Manager</span>
+      </div>
+      <div class="job-title">Trưởng phòng Nhân sự & Văn hóa</div>
+      <div class="job-location">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C5.24 0 3 2.24 3 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.75C7.03 6.75 6.25 5.97 6.25 5S7.03 3.25 8 3.25 9.75 4.03 9.75 5 8.97 6.75 8 6.75z"/></svg>
+        Hà Nội (Cầu Giấy)
+      </div>
+      <p class="job-desc">
+        Xây dựng và duy trì văn hóa doanh nghiệp mạnh, quản lý toàn bộ vòng đời nhân sự từ tuyển dụng, onboarding, đến phát triển lộ trình nghề nghiệp, đảm bảo tuân thủ luật lao động Việt Nam.
+      </p>
+      <div class="job-footer">
+        <div class="job-salary">18 – 30 triệu <span>/ tháng</span></div>
+        <div class="job-type">Toàn thời gian</div>
+      </div>
+      <div class="deadline">📅 Đóng hồ sơ: 20/08/2025</div>
+      <button class="apply-btn">Ứng tuyển ngay</button>
+    </div>
+
+    <!-- Card 7: Finance -->
+    <div class="job-card" data-dept="finance">
+      <div class="card-top">
+        <span class="dept-badge dept-finance">Tài chính</span>
+        <span class="level-badge">Senior</span>
+      </div>
+      <div class="job-title">Kế toán Trưởng (Chief Accountant)</div>
+      <div class="job-location">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C5.24 0 3 2.24 3 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.75C7.03 6.75 6.25 5.97 6.25 5S7.03 3.25 8 3.25 9.75 4.03 9.75 5 8.97 6.75 8 6.75z"/></svg>
+        Hà Nội (Ba Đình)
+      </div>
+      <p class="job-desc">
+        Phụ trách toàn bộ công tác kế toán theo chuẩn VFRS và IFRS, lập báo cáo tài chính định kỳ, quản lý ngân sách, kiểm soát dòng tiền và hỗ trợ Hội đồng quản trị trong quyết định đầu tư.
+      </p>
+      <div class="job-footer">
+        <div class="job-salary">25 – 45 triệu <span>/ tháng</span></div>
+        <div class="job-type">Toàn thời gian</div>
+      </div>
+      <div class="deadline">📅 Đóng hồ sơ: 05/08/2025</div>
+      <button class="apply-btn">Ứng tuyển ngay</button>
+    </div>
+
+    <!-- Card 8: Legal -->
+    <div class="job-card" data-dept="legal">
+      <div class="card-top">
+        <span class="dept-badge dept-legal">Pháp lý</span>
+        <span class="level-badge">Specialist</span>
+      </div>
+      <div class="job-title">Chuyên viên Pháp lý Doanh nghiệp</div>
+      <div class="job-location">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C5.24 0 3 2.24 3 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.75C7.03 6.75 6.25 5.97 6.25 5S7.03 3.25 8 3.25 9.75 4.03 9.75 5 8.97 6.75 8 6.75z"/></svg>
+        Hà Nội (Hoàn Kiếm)
+      </div>
+      <p class="job-desc">
+        Tư vấn và soạn thảo hợp đồng thương mại, hợp đồng SaaS, NDA và các thỏa thuận đối tác. Theo dõi tuân thủ quy định pháp luật về an toàn dữ liệu, sở hữu trí tuệ và giao dịch điện tử.
+      </p>
+      <div class="job-footer">
+        <div class="job-salary">18 – 32 triệu <span>/ tháng</span></div>
+        <div class="job-type">Toàn thời gian</div>
+      </div>
+      <div class="deadline">📅 Đóng hồ sơ: 25/08/2025</div>
+      <button class="apply-btn">Ứng tuyển ngay</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits-strip">
+  <div class="benefits-inner">
+    <div class="benefits-label">Tại sao chọn TechVina</div>
+    <div class="benefits-grid">
+      <div class="benefit-item">
+        <div class="benefit-icon">💰</div>
+        <div class="benefit-title">Lương cạnh tranh</div>
+        <div class="benefit-text">Review lương 2 lần/năm, thưởng hiệu suất theo quý và cổ phiếu ESOP cho nhân sự cấp cao.</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">🏥</div>
+        <div class="benefit-title">Bảo hiểm sức khỏe</div>
+        <div class="benefit-text">Bảo hiểm sức khỏe cao cấp Bảo Việt cho nhân viên và người thân, giới hạn 100 triệu/năm.</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">📚</div>
+        <div class="benefit-title">Học tập liên tục</div>
+        <div class="benefit-text">Ngân sách đào tạo 10 triệu/năm, hỗ trợ thi chứng chỉ quốc tế AWS, PMP, CPA.</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">🏠</div>
+        <div class="benefit-title">Linh hoạt & Remote</div>
+        <div class="benefit-text">Hybrid và remote linh hoạt, coworking allowance 2 triệu/tháng cho nhân viên remote.</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">🌏</div>
+        <div class="benefit-title">Cơ hội quốc tế</div>
+        <div class="benefit-text">Chương trình secondment tại Singapore, cơ hội tham gia triển khai dự án khu vực Đông Nam Á.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-section" id="process">
+  <div class="section-eyebrow">Quy trình ứng tuyển</div>
+  <div class="section-h2">Từ hồ sơ đến ngày nhận việc</div>
+  <div class="process-steps">
+    <div class="process-step done">
+      <div class="step-circle">1</div>
+      <div class="step-title">Nộp hồ sơ</div>
+      <div class="step-desc">CV và thư giới thiệu qua portal tuyển dụng. Phản hồi trong 3 ngày làm việc.</div>
+    </div>
+    <div class="process-step done">
+      <div class="step-circle">2</div>
+      <div class="step-title">Phỏng vấn HR</div>
+      <div class="step-desc">Video call 30 phút để tìm hiểu về động lực, kỳ vọng và sự phù hợp văn hóa.</div>
+    </div>
+    <div class="process-step done">
+      <div class="step-circle">3</div>
+      <div class="step-title">Bài kiểm tra</div>
+      <div class="step-desc">Bài test kỹ năng hoặc case study thực tế (tối đa 2 giờ, trả thù lao nếu trên 4 giờ).</div>
+    </div>
+    <div class="process-step">
+      <div class="step-circle">4</div>
+      <div class="step-title">Phỏng vấn chuyên môn</div>
+      <div class="step-desc">Gặp trực tiếp Trưởng bộ phận và đồng nghiệp tương lai, thảo luận kỳ vọng và offer.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">TechVina Solutions</div>
+  <ul class="footer-links">
+    <li><a href="#">Chính sách bảo mật</a></li>
+    <li><a href="#">Điều khoản sử dụng</a></li>
+    <li><a href="#">Liên hệ HR</a></li>
+  </ul>
+  <div class="footer-note">© 2025 CTCP TechVina Solutions · MST 0108xxxxxx · Hà Nội, Việt Nam</div>
+</footer>
+
+<script>
+  // Filter tabs
+  const tabs = document.querySelectorAll('.filter-tab');
+  const cards = document.querySelectorAll('.job-card');
+  const showingLabel = document.getElementById('showing-label');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const filter = tab.dataset.filter;
+      let visible = 0;
+
+      cards.forEach(card => {
+        const match = filter === 'all' || card.dataset.dept === filter;
+        card.classList.toggle('hidden', !match);
+        if (match) visible++;
+      });
+
+      showingLabel.textContent = `Hiển thị ${visible} vị trí`;
+    });
+  });
+
+  // Apply button — modal-like alert (replace with real modal in production)
+  document.querySelectorAll('.apply-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const title = e.target.closest('.job-card').querySelector('.job-title').textContent;
+      alert(`Bạn đang ứng tuyển vị trí:\n"${title}"\n\nVui lòng gửi CV tới: hr@techvina.vn`);
+    });
+  });
+
+  // Intersection Observer for card animations on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  cards.forEach(card => observer.observe(card));
+</script>
+</body>
+</html>
